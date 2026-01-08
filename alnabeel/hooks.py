@@ -15,17 +15,17 @@ doc_events = {
     #     "on_cancel": "alnabeel.consumption.update_on_cancel"
     # },
 
-	"Purchase Order": {
-		"validate": "alnabeel.utils.project_budget.validate_po",
-	},
-	"Purchase Invoice": {
-		"validate": "alnabeel.utils.project_budget.validate_pi",
-	},
+	# "Purchase Order": {
+	# 	"validate": "alnabeel.utils.project_budget.validate_po",
+	# },
+	# "Purchase Invoice": {
+	# 	"validate": "alnabeel.utils.project_budget.validate_pi",
+	# },
 
-    "Material Request": {
-        "on_submit": "alnabeel.custom_project_list.update_consumed_on_submit",
-        "on_cancel": "alnabeel.custom_project_list.update_consumed_on_cancel"
-    }
+    # "Material Request": {
+    #     "on_submit": "alnabeel.custom_project_list.update_consumed_on_submit",
+    #     "on_cancel": "alnabeel.custom_project_list.update_consumed_on_cancel"
+    # }
 }
 
 
