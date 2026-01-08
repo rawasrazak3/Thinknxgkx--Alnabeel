@@ -7,24 +7,24 @@ app_license = "mit"
 
 doc_events = {
     "Quantity Budget": {
-        "validate": "your_app.your_app.doctype.quantity_budget.quantity_budget.validate"
-    }
-}
+        "validate": "alnabeel.alnabeel.doctype.quantity_budget.quantity_budget.validate"
+    },
 
+    # "Material Request": {
+    #     "on_submit": "alnabeel.consumption.update_on_submit",
+    #     "on_cancel": "alnabeel.consumption.update_on_cancel"
+    # },
 
-doc_events = {
 	"Purchase Order": {
-		"validate": "your_app.utils.project_budget.validate_po",
+		"validate": "alnabeel.utils.project_budget.validate_po",
 	},
 	"Purchase Invoice": {
-		"validate": "your_app.utils.project_budget.validate_pi",
+		"validate": "alnabeel.utils.project_budget.validate_pi",
 	},
-}
 
-doc_events = {
     "Material Request": {
-        "on_submit": "your_app.custom_project_list.update_consumed_on_submit",
-        "on_cancel": "your_app.custom_project_list.update_consumed_on_cancel"
+        "on_submit": "alnabeel.custom_project_list.update_consumed_on_submit",
+        "on_cancel": "alnabeel.custom_project_list.update_consumed_on_cancel"
     }
 }
 
