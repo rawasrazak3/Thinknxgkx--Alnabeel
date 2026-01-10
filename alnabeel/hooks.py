@@ -15,12 +15,14 @@ doc_events = {
             "alnabeel.alnabeel.utils.material_request_hooks.on_submit_material_request",
             # "alnabeel.alnabeel.doctype.quantity_budget.quantity_budget.update_consumed_on_submit",
             # "alnabeel.utils.budget.update_consumed_on_submit",
+             "alnabeel.alnabeel.utils.budget.update_budget_on_mr_submit",
             
         ],
         "on_cancel": [
             "alnabeel.alnabeel.utils.material_request_hooks.on_cancel_material_request",
             # "alnabeel.alnabeel.doctype.quantity_budget.quantity_budget.update_consumed_on_cancel",
-            #  "alnabeel.utils.budget.update_consumed_on_cancel"
+            #  "alnabeel.utils.budget.update_consumed_on_cancel",
+            "alnabeel.alnabeel.utils.budget.revert_budget_on_mr_cancel"
         ],
     },
     
