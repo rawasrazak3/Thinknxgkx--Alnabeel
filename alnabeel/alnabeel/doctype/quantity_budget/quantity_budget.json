@@ -192,7 +192,8 @@
    "fieldname": "item_budget_detail",
    "fieldtype": "Table",
    "label": "Item Budget Detail",
-   "options": "Item Budget Detail"
+   "options": "Item Budget Detail",
+   "reqd": 1
   },
   {
    "fieldname": "amended_from",
@@ -208,7 +209,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-01-08 12:26:07.732023",
+ "modified": "2026-01-08 23:10:27.936901",
  "modified_by": "Administrator",
  "module": "Alnabeel",
  "name": "Quantity Budget",

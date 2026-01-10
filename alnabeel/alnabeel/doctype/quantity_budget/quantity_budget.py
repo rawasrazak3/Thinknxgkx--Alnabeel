@@ -1,249 +1,131 @@
-# Copyright (c) 2026, krishna and contributors
-# For license information, please see license.txt
-
-# import frappe
-# from frappe.model.document import Document
-
-
-# class QuantityBudget(Document):
-# 	pass
-
-# Copyright (c) 2026
-# For license information, please see license.txt
-
 import frappe
 from frappe import _
 from frappe.model.document import Document
-from frappe.utils import flt, cint
-
-from erpnext.accounts.doctype.accounting_dimension.accounting_dimension import (
-	get_accounting_dimensions,
-)
+from frappe.utils import flt
 from erpnext.accounts.utils import get_fiscal_year
-# from erpnext.accounts.general_ledger import get_balance_on
-from erpnext.accounts.utils import get_balance_on
+from alnabeel.alnabeel.utils.quantity_budget_consumption import update_consumed_qty
 
-
-
-# ---------------------------------------------------------
-# Exceptions
-# ---------------------------------------------------------
-class BudgetError(frappe.ValidationError):
-	pass
-
+class QuantityBudgetError(frappe.ValidationError):
+    pass
 
 class DuplicateBudgetError(frappe.ValidationError):
-	pass
+    pass
 
-
-# ---------------------------------------------------------
-# Custom Budget List
-# ---------------------------------------------------------
 class QuantityBudget(Document):
+    def validate(self):
+        self.validate_budget_against()
+        self.validate_duplicate()
+        self.set_null_value()
+        self.validate_items()
+        self.update_consumed_amounts()  # fetch consumed qty/amount from MR/PO
 
-	def validate(self):
-		self.validate_items()
-		self.validate_duplicate()
-		self.validate_dimension_required()
+    def validate_budget_against(self):
+        if not self.get(frappe.scrub(self.budget_against)):
+            frappe.throw(_("{0} is mandatory").format(self.budget_against))
 
-	# -----------------------------------------------------
-	# Validate child table (Item Budget Detail)
-	# -----------------------------------------------------
-	def validate_items(self):
-		if not self.item_budget_detail:
-			frappe.throw(_("Item Budget Detail table cannot be empty"))
+    def validate_duplicate(self):
+        budget_against_field = frappe.scrub(self.budget_against)
+        budget_against = self.get(budget_against_field)
 
-		seen = set()
+        items = [d.item_code for d in self.item_budget_detail] or []
+        if not items:
+            return
 
-		for d in self.item_budget_detail:
-			if not d.item_code:
-				frappe.throw(_("Item Code is mandatory"))
+        existing_budget = frappe.db.sql(
+            """
+            SELECT b.name, ba.item_code FROM `tabQuantity Budget` b, `tabItem Budget Detail` ba
+            WHERE ba.parent = b.name AND b.docstatus < 2
+            AND b.company=%s AND b.{0}=%s AND b.fiscal_year=%s
+            AND b.name!=%s AND ba.item_code IN ({1})
+            """.format(budget_against_field, ",".join(["%s"] * len(items))),
+            tuple([self.company, budget_against, self.fiscal_year, self.name] + items),
+            as_dict=True
+        )
 
-			if d.item_code in seen:
-				frappe.throw(
-					_("Item {0} is entered more than once").format(d.item_code)
-				)
-			seen.add(d.item_code)
+        for d in existing_budget:
+            frappe.throw(
+                _("Another Quantity Budget '{0}' already exists for {1} '{2}' and Item '{3}'")
+                .format(d.name, self.budget_against, budget_against, d.item_code),
+                DuplicateBudgetError
+            )
 
-			# if not d.account:
-			# 	frappe.throw(
-			# 		_("Expense Account missing for Item {0}").format(d.item_code)
-			# 	)
+    def set_null_value(self):
+        if self.budget_against == "Cost Center":
+            self.project = None
+        elif self.budget_against == "Project":
+            self.cost_center = None
 
-			if flt(d.budget_qty) <= 0:
-				frappe.throw(
-					_("Budget Quantity must be greater than zero for Item {0}")
-					.format(d.item_code)
-				)
+    def validate_items(self):
+        for row in self.item_budget_detail:
+            if flt(row.budget_qty) <= 0:
+                frappe.throw(f"Budget Qty must be > 0 for Item {row.item_code}")
+            if flt(row.consumed_qty) > flt(row.budget_qty):
+                frappe.throw(f"Consumed Qty cannot exceed Budget Qty for Item {row.item_code}")
 
-			if flt(d.budget_amount) <= 0:
-				frappe.throw(
-					_("Budget Amount must be greater than zero for Item {0}")
-					.format(d.item_code)
-				)
+    def update_consumed_amounts(self):
+        for row in self.item_budget_detail:
+            consumed = self.get_budget_consumed(row)
+            row.consumed_qty = consumed.get("consumed_qty", 0)
+            row.consumed_amount = consumed.get("consumed_amount", 0)
 
-	# -----------------------------------------------------
-	# Prevent duplicate budgets (Item + FY + Dimension)
-	# -----------------------------------------------------
-	def validate_duplicate(self):
-		items = [d.item_code for d in self.item_budget_detail]
+    def get_budget_consumed(self, row):
+        """
+        Calculate consumed qty/amount from Material Requests and Purchase Orders.
+        This calls a utility function that handles MR/PO logic.
+        """
+        if not self.fiscal_year or not self.company:
+            return {"consumed_qty": 0, "consumed_amount": 0}
 
-		if not items:
-			return
-
-		conditions = ["cbl.company = %s", "cbl.fiscal_year = %s", "cbl.name != %s"]
-		values = [self.company, self.fiscal_year, self.name]
-
-		for dim in get_accounting_dimensions():
-			val = self.get(dim.fieldname)
-			if val:
-				conditions.append(f"cbl.{dim.fieldname} = %s")
-				values.append(val)
-
-		query = f"""
-			SELECT cbl.name, ibd.item_code
-			FROM `tabCustom Budget List` cbl
-			JOIN `tabItem Budget Detail` ibd ON ibd.parent = cbl.name
-			WHERE cbl.docstatus < 2
-			  AND ibd.item_code IN ({",".join(["%s"] * len(items))})
-			  AND {" AND ".join(conditions)}
-		"""
-
-		existing = frappe.db.sql(query, values + items, as_dict=True)
-
-		if existing:
-			row = existing[0]
-			frappe.throw(
-				_("Budget already exists for Item {0} in Fiscal Year {1}")
-				.format(row.item_code, self.fiscal_year),
-				DuplicateBudgetError,
-			)
-
-	# -----------------------------------------------------
-	# Dimension mandatory validation
-	# -----------------------------------------------------
-	def validate_dimension_required(self):
-		for dim in get_accounting_dimensions():
-			if dim.mandatory_for_budget and not self.get(dim.fieldname):
-				frappe.throw(
-					_("{0} is mandatory for Budget").format(dim.label)
-				)
+        # Call your utility function (you must implement this in utils/quantity_budget_consumption.py)
+        return update_consumed_qty(
+            item_code=row.item_code,
+            company=self.company,
+            fiscal_year=self.fiscal_year
+        )
 
 
-# ---------------------------------------------------------
-# Budget Enforcement (Called from GL / Purchase / Stock)
-# ---------------------------------------------------------
-def validate_expense_against_budget(args):
-	"""
-	args must contain:
-	company, fiscal_year, item_code, account,
-	cost_center / project / dimensions,
-	amount, posting_date, action
-	"""
+    def update_consumed_on_submit(doc, method):
+        from alnabeel.alnabeel.utils.quantity_budget_consumption import update_consumed_qty
+        for item in doc.items:
+            update_consumed_qty(
+                item_code=item.item_code,
+                qty=item.qty,
+                rate=item.rate,
+                company=doc.company,
+                fiscal_year=get_fiscal_year(doc.transaction_date or doc.posting_date)[0],
+                budget_against="Project" if getattr(item, "project", None) else "Cost Center",
+                against_value=getattr(item, "project", None) or getattr(item, "cost_center", None),
+                is_cancel=False
+            )
 
-	if not args.get("item_code"):
-		return
+    def update_consumed_on_cancel(doc, method):
+        from alnabeel.alnabeel.utils.quantity_budget_consumption import update_consumed_qty
+        for item in doc.items:
+            update_consumed_qty(
+                item_code=item.item_code,
+                qty=item.qty,
+                rate=item.rate,
+                company=doc.company,
+                fiscal_year=get_fiscal_year(doc.transaction_date or doc.posting_date)[0],
+                budget_against="Project" if getattr(item, "project", None) else "Cost Center",
+                against_value=getattr(item, "project", None) or getattr(item, "cost_center", None),
+                is_cancel=True
+            )
 
-	budgets = get_matching_item_budgets(args)
+@frappe.whitelist()
+def get_item_budget_for_project(project):
+    """
+    Fetch Item Budget Detail table for a given project.
+    """
+    qb = frappe.get_all("Quantity Budget", filters={"project": project, "docstatus": 1}, fields=["name"])
+    if not qb:
+        return []
 
-	for b in budgets:
-		actual = get_actual_expense(args, b)
-		budget = get_budget_amount(b, args)
+    qb_name = qb[0].name
+    items = frappe.get_all(
+        "Item Budget Detail",
+        filters={"parent": qb_name},
+        fields=["item_code", "item_name", "budget_qty", "budget_rate", "budget_amount", "consumed_qty", "consumed_amount"]
+    )
+    return items
 
-		if actual + flt(args.amount) > budget:
-			action = b.action or "Stop"
-			msg = _(
-				"Budget exceeded for Item {0}<br>"
-				"Budget: {1}<br>"
-				"Actual + Requested: {2}"
-			).format(
-				args.item_code,
-				frappe.format(budget),
-				frappe.format(actual + flt(args.amount)),
-			)
-
-			if action == "Stop":
-				frappe.throw(msg, BudgetError)
-			elif action == "Warn":
-				frappe.msgprint(msg, indicator="orange")
-
-
-# ---------------------------------------------------------
-# Helpers
-# ---------------------------------------------------------
-def get_matching_item_budgets(args):
-	conditions = [
-		"cbl.company = %(company)s",
-		"cbl.fiscal_year = %(fiscal_year)s",
-		"ibd.item_code = %(item_code)s",
-		"ibd.account = %(account)s",
-		"cbl.docstatus = 1",
-	]
-
-	for dim in get_accounting_dimensions():
-		if args.get(dim.fieldname):
-			conditions.append(f"cbl.{dim.fieldname} = %({dim.fieldname})s")
-
-	query = f"""
-		SELECT
-			cbl.name,
-			cbl.action,
-			ibd.budget_amount
-		FROM `tabCustom Budget List` cbl
-		JOIN `tabItem Budget Detail` ibd
-			ON ibd.parent = cbl.name
-		WHERE {" AND ".join(conditions)}
-	"""
-
-	return frappe.db.sql(query, args, as_dict=True)
-
-
-def get_actual_expense(args, budget):
-	"""
-	Uses GL Entry to get actual expense
-	"""
-
-	dim_conditions = []
-	dim_values = {}
-
-	for dim in get_accounting_dimensions():
-		if args.get(dim.fieldname):
-			dim_conditions.append(f"gle.{dim.fieldname} = %({dim.fieldname})s")
-			dim_values[dim.fieldname] = args.get(dim.fieldname)
-
-	query = f"""
-		SELECT SUM(debit - credit)
-		FROM `tabGL Entry` gle
-		WHERE
-			gle.company = %(company)s
-			AND gle.account = %(account)s
-			AND gle.posting_date <= %(posting_date)s
-			AND gle.is_cancelled = 0
-			{" AND ".join(dim_conditions)}
-	"""
-
-	return flt(
-		frappe.db.sql(
-			query,
-			{
-				"company": args.company,
-				"account": args.account,
-				"posting_date": args.posting_date,
-				**dim_values,
-			},
-		)[0][0]
-	)
-
-
-def get_budget_amount(budget, args):
-	return flt(budget.budget_amount)
-
-
-# def validate_expense_against_project_budget_hook(doc, method):
-#     for item in doc.items:
-#         args = {
-#             "project": doc.project,
-#             "item_code": item.item_code,
-#             "account": item.expense_account,
-#         }
-#         validate_expense_against_project_budget(args, expense_amount=item.amount)

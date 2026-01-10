@@ -5,5 +5,5 @@
 from frappe.tests.utils import FrappeTestCase
 
 
-class TestCustomProjectList(FrappeTestCase):
+class TestProjectMaterialRequest(FrappeTestCase):
 	pass
