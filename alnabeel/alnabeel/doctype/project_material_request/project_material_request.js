@@ -1,31 +1,64 @@
 
+// // frappe.ui.form.on("Project Material Request", {
+// //     refresh(frm) {
+// //         if (frm.is_new()) return;
+
+// //         // Remove all buttons first
+// //         frm.clear_custom_buttons();
+
+// //         // 🔹 If PMR table NOT visible → show Create Material Request
+// //         if (!frm.doc.show_pmr_table) {
+// //             frm.add_custom_button(
+// //                 __("Create Material Request"),
+// //                 () => {
+// //                     load_pmr_table(frm);
+// //                 },
+// //                 __("Actions")
+// //             );
+// //         }
+
+// //         // 🔹 If PMR table IS visible → show Move to MR
+// //         if (frm.doc.show_pmr_table) {
+// //             frm.add_custom_button(
+// //                 __("Move to MR"),
+// //                 () => {
+// //                     move_to_material_request(frm);
+// //                 },
+// //                 __("Actions")
+// //             );
+// //         }
+// //     }
+// // });
+
+
+
+
 // frappe.ui.form.on("Project Material Request", {
 //     refresh(frm) {
 //         if (frm.is_new()) return;
 
-//         // Remove all buttons first
-//         frm.clear_custom_buttons();
+//         // Remove previously added buttons
+//         frm.remove_custom_button(__("Create Material Request"));
+//         frm.remove_custom_button(__("Move to MR"));
 
-//         // 🔹 If PMR table NOT visible → show Create Material Request
+//         // 🔹 Step 1: PMR not loaded → show Create Material Request
 //         if (!frm.doc.show_pmr_table) {
 //             frm.add_custom_button(
 //                 __("Create Material Request"),
 //                 () => {
 //                     load_pmr_table(frm);
-//                 },
-//                 __("Actions")
-//             );
+//                 }
+//             ).addClass("btn-primary"); // optional: make it primary
 //         }
 
-//         // 🔹 If PMR table IS visible → show Move to MR
+//         // 🔹 Step 2: PMR loaded → show Move to MR
 //         if (frm.doc.show_pmr_table) {
 //             frm.add_custom_button(
 //                 __("Move to MR"),
 //                 () => {
 //                     move_to_material_request(frm);
-//                 },
-//                 __("Actions")
-//             );
+//                 }
+//             ).addClass("btn-primary");
 //         }
 //     }
 // });
@@ -34,32 +67,35 @@ frappe.ui.form.on("Project Material Request", {
     refresh(frm) {
         if (frm.is_new()) return;
 
-        // Remove previously added buttons
-        frm.remove_custom_button(__("Create Material Request"));
-        frm.remove_custom_button(__("Move to MR"));
+        frm.clear_custom_buttons();
 
-        // 🔹 Step 1: PMR not loaded → show Create Material Request
+        //  LOCK after MR creation
+        if (frm.doc.mr_created) {
+            frm.set_read_only(true);
+            frappe.show_alert({
+                message: __("Material Request already created. Document locked."),
+                indicator: "green"
+            });
+            return;
+        }
+
+        // STEP 1: Header saved → Load PMR items
         if (!frm.doc.show_pmr_table) {
             frm.add_custom_button(
                 __("Create Material Request"),
-                () => {
-                    load_pmr_table(frm);
-                }
-            ).addClass("btn-primary"); // optional: make it primary
+                () => load_pmr_table(frm)
+            ).addClass("btn-primary");
         }
 
-        // 🔹 Step 2: PMR loaded → show Move to MR
-        if (frm.doc.show_pmr_table) {
+        // STEP 2: PMR saved → Move to MR
+        if (frm.doc.show_pmr_table && !frm.is_dirty()) {
             frm.add_custom_button(
                 __("Move to MR"),
-                () => {
-                    move_to_material_request(frm);
-                }
+                () => move_to_material_request(frm)
             ).addClass("btn-primary");
         }
     }
 });
-
 
 //move to MR function
 function move_to_material_request(frm) {
@@ -127,8 +163,9 @@ function load_pmr_table(frm) {
             frm.set_value("show_pmr_table", 1);
             frm.refresh_field("pmr_items");
 
-            // 🔥 Button switches automatically
+            //  Button switches automatically
             frm.refresh();
         }
     });
 }
+

@@ -12,6 +12,9 @@
   "section_break_pcby",
   "show_pmr_table",
   "pmr_items",
+  "section_break_owej",
+  "mr_created",
+  "material_request",
   "section_break_kplz",
   "amended_from"
  ],
@@ -20,7 +23,8 @@
    "fetch_from": "project.project_type",
    "fieldname": "project_type",
    "fieldtype": "Data",
-   "label": "Project Type"
+   "label": "Project Type",
+   "read_only": 1
   },
   {
    "fieldname": "project",
@@ -63,23 +67,44 @@
    "options": "PMR Table"
   },
   {
-   "fetch_from": "project.warehouse",
+   "fetch_from": "project.custom_warehouse",
    "fieldname": "warehouse",
-   "fieldtype": "Data",
-   "label": "Warehouse"
+   "fieldtype": "Link",
+   "label": "Warehouse",
+   "options": "Warehouse",
+   "read_only": 1
   },
   {
    "fieldname": "required_by_date",
    "fieldtype": "Date",
    "label": "Required By",
    "reqd": 1
+  },
+  {
+   "fieldname": "section_break_owej",
+   "fieldtype": "Section Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "mr_created",
+   "fieldtype": "Check",
+   "hidden": 1,
+   "label": "MR Created"
+  },
+  {
+   "fieldname": "material_request",
+   "fieldtype": "Link",
+   "hidden": 1,
+   "label": "Material Request",
+   "no_copy": 1,
+   "options": "Material Request",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
- "is_submittable": 1,
  "links": [],
- "modified": "2026-01-09 23:10:35.089691",
+ "modified": "2026-01-16 15:08:54.141910",
  "modified_by": "Administrator",
  "module": "Alnabeel",
  "name": "Project Material Request",
