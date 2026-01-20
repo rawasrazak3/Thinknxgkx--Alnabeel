@@ -1,0 +1,106 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "naming_series:",
+ "creation": "2026-01-19 13:03:21.273240",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "date",
+  "contractor",
+  "project",
+  "site",
+  "labour_attendance_detail_section",
+  "labour_attendance_detail",
+  "total_amount",
+  "section_break_kseq",
+  "naming_series"
+ ],
+ "fields": [
+  {
+   "fieldname": "date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Date",
+   "reqd": 1
+  },
+  {
+   "fetch_from": "labourer.contractor",
+   "fieldname": "contractor",
+   "fieldtype": "Link",
+   "in_global_search": 1,
+   "label": "Contractor",
+   "options": "Supplier",
+   "reqd": 1
+  },
+  {
+   "fetch_from": "contractor.project",
+   "fieldname": "project",
+   "fieldtype": "Table",
+   "label": "Project",
+   "options": "Contractor Project Mapping"
+  },
+  {
+   "fieldname": "site",
+   "fieldtype": "Link",
+   "label": "Site / Location",
+   "options": "Location"
+  },
+  {
+   "fieldname": "labour_attendance_detail_section",
+   "fieldtype": "Section Break",
+   "label": "Labour Attendance Detail"
+  },
+  {
+   "fieldname": "labour_attendance_detail",
+   "fieldtype": "Table",
+   "label": "Labour Attendance Detail",
+   "options": "Labour Attendance Detail"
+  },
+  {
+   "fieldname": "total_amount",
+   "fieldtype": "Currency",
+   "label": "Total Amount",
+   "precision": "3"
+  },
+  {
+   "fieldname": "section_break_kseq",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "hidden": 1,
+   "label": "Naming Series",
+   "options": "DLA-.YYYY.-.#####"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-01-20 11:48:21.554089",
+ "modified_by": "Administrator",
+ "module": "Alnabeel",
+ "name": "Daily Labour Attendance",
+ "naming_rule": "By \"Naming Series\" field",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

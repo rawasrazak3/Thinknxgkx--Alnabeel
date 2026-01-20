@@ -60,7 +60,7 @@
 
 #     # Create Material Request
 #     mr = frappe.new_doc("Material Request")
-#     mr.material_request_type = "Material Issue"
+#     mr.material_request_type = "Purchase"
 #     mr.project = pmr.project
 #     mr.set_warehouse = pmr.warehouse
 #     mr.schedule_date = pmr.required_by_date
@@ -160,7 +160,7 @@ def create_material_request(pmr_name):
 
     # Create Material Request
     mr = frappe.new_doc("Material Request")
-    mr.material_request_type = "Material Issue"
+    mr.material_request_type = "Purchase"
     mr.project = pmr.project
     mr.set_warehouse = pmr.warehouse
     mr.schedule_date = pmr.required_by_date

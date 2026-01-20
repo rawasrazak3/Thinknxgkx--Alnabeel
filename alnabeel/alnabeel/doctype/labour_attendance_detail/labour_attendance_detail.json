@@ -1,0 +1,120 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-01-19 14:41:12.539981",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "labourer_id",
+  "labourer_name",
+  "worker_name",
+  "work_type",
+  "from_time",
+  "to_time",
+  "normal_hours",
+  "rate_per_hour",
+  "standard_hours_amt",
+  "ot_hours",
+  "ot_rate_per_hour",
+  "ot_hours_amt"
+ ],
+ "fields": [
+  {
+   "fieldname": "labourer_id",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Labourer ID",
+   "options": "Labourer Master"
+  },
+  {
+   "fetch_from": "labourer_id.labourer_name",
+   "fieldname": "labourer_name",
+   "fieldtype": "Data",
+   "label": "Labourer Name"
+  },
+  {
+   "fieldname": "work_type",
+   "fieldtype": "Link",
+   "label": "Work Type",
+   "options": "Work Type",
+   "reqd": 1
+  },
+  {
+   "fieldname": "normal_hours",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Normal Hours",
+   "non_negative": 1,
+   "precision": "2",
+   "reqd": 1
+  },
+  {
+   "fieldname": "ot_hours",
+   "fieldtype": "Float",
+   "label": "OT Hours",
+   "non_negative": 1,
+   "precision": "2"
+  },
+  {
+   "fieldname": "from_time",
+   "fieldtype": "Time",
+   "label": "From Time"
+  },
+  {
+   "fieldname": "to_time",
+   "fieldtype": "Time",
+   "label": "To Time"
+  },
+  {
+   "fieldname": "rate_per_hour",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Rate Per Hour",
+   "non_negative": 1,
+   "precision": "3",
+   "reqd": 1
+  },
+  {
+   "fieldname": "standard_hours_amt",
+   "fieldtype": "Currency",
+   "label": "Standard Hours Amt",
+   "non_negative": 1,
+   "precision": "3"
+  },
+  {
+   "fieldname": "ot_rate_per_hour",
+   "fieldtype": "Currency",
+   "label": "OT Rate Per Hour",
+   "non_negative": 1,
+   "precision": "3"
+  },
+  {
+   "fieldname": "ot_hours_amt",
+   "fieldtype": "Currency",
+   "label": "OT Hours Amt",
+   "non_negative": 1,
+   "precision": "3"
+  },
+  {
+   "fieldname": "worker_name",
+   "fieldtype": "Data",
+   "label": "Worker Name"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2026-01-20 15:19:26.156651",
+ "modified_by": "Administrator",
+ "module": "Alnabeel",
+ "name": "Labour Attendance Detail",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

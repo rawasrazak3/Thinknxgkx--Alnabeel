@@ -1,0 +1,98 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-01-20 10:53:10.830956",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "work_type",
+  "uom",
+  "currency",
+  "base_labour_rate",
+  "overtime_rate",
+  "night_shift_rate",
+  "holiday_rate",
+  "bonus_rate"
+ ],
+ "fields": [
+  {
+   "fieldname": "work_type",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Work Type",
+   "options": "Work Type",
+   "reqd": 1
+  },
+  {
+   "default": "Hour",
+   "fieldname": "uom",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "UOM",
+   "options": "\nDay\nHour\nShift",
+   "reqd": 1
+  },
+  {
+   "fieldname": "currency",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Currency",
+   "options": "Currency",
+   "reqd": 1
+  },
+  {
+   "fieldname": "base_labour_rate",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Base Labour Rate",
+   "non_negative": 1,
+   "precision": "3",
+   "reqd": 1
+  },
+  {
+   "fieldname": "overtime_rate",
+   "fieldtype": "Currency",
+   "label": "Overtime Rate",
+   "non_negative": 1,
+   "precision": "3",
+   "reqd": 1
+  },
+  {
+   "fieldname": "night_shift_rate",
+   "fieldtype": "Currency",
+   "label": "NIght Shift Rate",
+   "non_negative": 1,
+   "precision": "3"
+  },
+  {
+   "fieldname": "holiday_rate",
+   "fieldtype": "Currency",
+   "label": "Holiday Rate",
+   "non_negative": 1,
+   "precision": "3"
+  },
+  {
+   "fieldname": "bonus_rate",
+   "fieldtype": "Currency",
+   "label": "Incentive / Bonus Rate",
+   "non_negative": 1,
+   "precision": "3"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2026-01-20 14:53:31.177765",
+ "modified_by": "Administrator",
+ "module": "Alnabeel",
+ "name": "Contractor Labour Rate Details",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
