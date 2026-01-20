@@ -3,8 +3,8 @@ from frappe.utils import flt
 
 #update budget on MR submit
 def update_budget_on_mr_submit(doc, method):
-    # Only for Material Issue
-    if doc.material_request_type != "Material Issue":
+    # Only for Purchase
+    if doc.material_request_type != "Purchase":
         return
 
     for item in doc.items:
@@ -57,7 +57,7 @@ def update_item_budget(project, item_code, consumed_qty):
 
 #revert on MR cancel
 def revert_budget_on_mr_cancel(doc, method):
-    if doc.material_request_type != "Material Issue":
+    if doc.material_request_type != "Purchase":
         return
 
     for item in doc.items:

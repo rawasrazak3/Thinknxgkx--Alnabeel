@@ -1,6 +1,7 @@
 {
  "actions": [],
  "allow_rename": 1,
+ "autoname": "naming_series:",
  "creation": "2026-01-09 00:20:08.973773",
  "doctype": "DocType",
  "engine": "InnoDB",
@@ -15,6 +16,8 @@
   "section_break_owej",
   "mr_created",
   "material_request",
+  "section_break_krfp",
+  "naming_series",
   "section_break_kplz",
   "amended_from"
  ],
@@ -99,12 +102,23 @@
    "no_copy": 1,
    "options": "Material Request",
    "read_only": 1
+  },
+  {
+   "fieldname": "section_break_krfp",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "hidden": 1,
+   "label": "Naming Series",
+   "options": "PMR-.YYYY.-.#####"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-01-16 15:08:54.141910",
+ "modified": "2026-01-19 16:55:42.047304",
  "modified_by": "Administrator",
  "module": "Alnabeel",
  "name": "Project Material Request",

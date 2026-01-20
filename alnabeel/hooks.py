@@ -40,6 +40,10 @@ doc_events = {
 
 
 
+doctype_js = {
+    "Payment Entry": "public/js/payment_entry.js"
+}
+
 # Apps
 # ------------------
 

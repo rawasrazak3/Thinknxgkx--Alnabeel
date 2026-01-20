@@ -32,37 +32,6 @@
 
 
 
-
-// frappe.ui.form.on("Project Material Request", {
-//     refresh(frm) {
-//         if (frm.is_new()) return;
-
-//         // Remove previously added buttons
-//         frm.remove_custom_button(__("Create Material Request"));
-//         frm.remove_custom_button(__("Move to MR"));
-
-//         // 🔹 Step 1: PMR not loaded → show Create Material Request
-//         if (!frm.doc.show_pmr_table) {
-//             frm.add_custom_button(
-//                 __("Create Material Request"),
-//                 () => {
-//                     load_pmr_table(frm);
-//                 }
-//             ).addClass("btn-primary"); // optional: make it primary
-//         }
-
-//         // 🔹 Step 2: PMR loaded → show Move to MR
-//         if (frm.doc.show_pmr_table) {
-//             frm.add_custom_button(
-//                 __("Move to MR"),
-//                 () => {
-//                     move_to_material_request(frm);
-//                 }
-//             ).addClass("btn-primary");
-//         }
-//     }
-// });
-
 frappe.ui.form.on("Project Material Request", {
     refresh(frm) {
         if (frm.is_new()) return;
@@ -86,6 +55,43 @@ frappe.ui.form.on("Project Material Request", {
                 () => load_pmr_table(frm)
             ).addClass("btn-primary");
         }
+
+        // Add Select / Unselect buttons above PMR table
+        if (frm.doc.show_pmr_table) {
+            const grid = frm.get_field("pmr_items").grid;
+
+            if (!grid.wrapper.find(".pmr-select-actions").length) {
+                const html = `
+                    <div class="pmr-select-actions" style="margin-bottom:10px;">
+                        <button class="btn btn-sm btn-secondary pmr-select-all">
+                            Select All
+                        </button>
+                        <button class="btn btn-sm btn-secondary pmr-unselect-all" style="margin-left:5px;">
+                            Unselect All
+                        </button>
+                    </div>
+                `;
+
+                grid.wrapper.prepend(html);
+
+                // Select All
+                grid.wrapper.find(".pmr-select-all").on("click", () => {
+                    (frm.doc.pmr_items || []).forEach(row => {
+                        row.select_item = 1;
+                    });
+                    frm.refresh_field("pmr_items");
+                });
+
+                // Unselect All
+                grid.wrapper.find(".pmr-unselect-all").on("click", () => {
+                    (frm.doc.pmr_items || []).forEach(row => {
+                        row.select_item = 0;
+                    });
+                    frm.refresh_field("pmr_items");
+                });
+            }
+        }
+
 
         // STEP 2: PMR saved → Move to MR
         if (frm.doc.show_pmr_table && !frm.is_dirty()) {
