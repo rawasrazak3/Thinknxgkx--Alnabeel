@@ -7,9 +7,7 @@
  "engine": "InnoDB",
  "field_order": [
   "work_type",
-  "labourer_id",
   "labourer_name",
-  "worker_name",
   "uom",
   "currency",
   "standard_rate",
@@ -18,6 +16,7 @@
  ],
  "fields": [
   {
+   "columns": 2,
    "fieldname": "work_type",
    "fieldtype": "Link",
    "in_list_view": 1,
@@ -26,12 +25,15 @@
    "reqd": 1
   },
   {
-   "fetch_from": "labourer_id.labourer_name",
+   "columns": 2,
    "fieldname": "labourer_name",
-   "fieldtype": "Data",
-   "label": "Labourer Name"
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Labourer Name",
+   "options": "Labourer Master"
   },
   {
+   "columns": 1,
    "default": "Hour",
    "fieldname": "uom",
    "fieldtype": "Select",
@@ -41,12 +43,15 @@
    "reqd": 1
   },
   {
+   "columns": 1,
    "fieldname": "currency",
    "fieldtype": "Link",
+   "in_list_view": 1,
    "label": "Currency",
    "options": "Currency"
   },
   {
+   "columns": 2,
    "fieldname": "standard_rate",
    "fieldtype": "Currency",
    "in_list_view": 1,
@@ -56,37 +61,29 @@
    "reqd": 1
   },
   {
+   "columns": 1,
    "fieldname": "overtime_rate",
    "fieldtype": "Currency",
+   "in_list_view": 1,
    "label": "Overtime Rate",
-   "non_negative": 1,
-   "precision": "3",
-   "reqd": 1
-  },
-  {
-   "fieldname": "bonus_rate",
-   "fieldtype": "Currency",
-   "label": "Incentive / Bonus Rate",
    "non_negative": 1,
    "precision": "3"
   },
   {
-   "fieldname": "labourer_id",
-   "fieldtype": "Link",
-   "label": "Labourer ID",
-   "options": "Labourer Master"
-  },
-  {
-   "fieldname": "worker_name",
-   "fieldtype": "Data",
-   "label": "Worker Name"
+   "columns": 1,
+   "fieldname": "bonus_rate",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Incentive / Bonus Rate",
+   "non_negative": 1,
+   "precision": "3"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2026-01-20 14:52:54.802803",
+ "modified": "2026-01-22 15:20:21.047727",
  "modified_by": "Administrator",
  "module": "Alnabeel",
  "name": "Contractor Rate Master Details",

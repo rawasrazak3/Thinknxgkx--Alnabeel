@@ -16,6 +16,8 @@ doc_events = {
             # "alnabeel.alnabeel.doctype.quantity_budget.quantity_budget.update_consumed_on_submit",
             # "alnabeel.utils.budget.update_consumed_on_submit",
              "alnabeel.alnabeel.utils.budget.update_budget_on_mr_submit",
+            "alnabeel.alnabeel.utils.daily_labour_attendance.lock_dla_after_mr",
+            "alnabeel.alnabeel.utils.dla_mr.lock_dla_after_mr_saved"
             
         ],
         "on_cancel": [
@@ -24,6 +26,9 @@ doc_events = {
             #  "alnabeel.utils.budget.update_consumed_on_cancel",
             "alnabeel.alnabeel.utils.budget.revert_budget_on_mr_cancel"
         ],
+        # "on_update": [
+        #     "alnabeel.alnabeel.utils.dla_mr.lock_dla_after_mr_saved"
+        # ]
     },
     
     "Purchase Order": {

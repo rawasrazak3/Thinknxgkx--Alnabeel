@@ -6,15 +6,28 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
+  "material_request_created",
+  "material_request",
+  "section_break_jycq",
   "date",
   "contractor",
   "project",
+  "normal_working_hours",
   "site",
   "labour_attendance_detail_section",
+  "from_time",
+  "to_time",
+  "select_all",
+  "unselect_all",
   "labour_attendance_detail",
-  "total_amount",
+  "total_standard_amount",
+  "total_ot_amount",
+  "total_bonus_amount",
+  "remarks_section",
+  "remarks",
   "section_break_kseq",
-  "naming_series"
+  "naming_series",
+  "amended_from"
  ],
  "fields": [
   {
@@ -38,7 +51,8 @@
    "fieldname": "project",
    "fieldtype": "Table",
    "label": "Project",
-   "options": "Contractor Project Mapping"
+   "options": "Contractor Project Mapping",
+   "reqd": 1
   },
   {
    "fieldname": "site",
@@ -58,12 +72,6 @@
    "options": "Labour Attendance Detail"
   },
   {
-   "fieldname": "total_amount",
-   "fieldtype": "Currency",
-   "label": "Total Amount",
-   "precision": "3"
-  },
-  {
    "fieldname": "section_break_kseq",
    "fieldtype": "Section Break"
   },
@@ -73,12 +81,102 @@
    "hidden": 1,
    "label": "Naming Series",
    "options": "DLA-.YYYY.-.#####"
+  },
+  {
+   "fieldname": "total_standard_amount",
+   "fieldtype": "Currency",
+   "label": "Total Standard Amount",
+   "non_negative": 1,
+   "precision": "3"
+  },
+  {
+   "fieldname": "total_ot_amount",
+   "fieldtype": "Currency",
+   "label": "Total OT Amount",
+   "non_negative": 1,
+   "precision": "3"
+  },
+  {
+   "fieldname": "total_bonus_amount",
+   "fieldtype": "Currency",
+   "label": "Total Incentive / Bonus Amount",
+   "non_negative": 1,
+   "precision": "3"
+  },
+  {
+   "fieldname": "from_time",
+   "fieldtype": "Time",
+   "label": "From Time",
+   "reqd": 1
+  },
+  {
+   "fieldname": "to_time",
+   "fieldtype": "Time",
+   "label": "To Time",
+   "reqd": 1
+  },
+  {
+   "fieldname": "select_all",
+   "fieldtype": "Button",
+   "label": "Select All"
+  },
+  {
+   "fieldname": "unselect_all",
+   "fieldtype": "Button",
+   "label": "Unselect All"
+  },
+  {
+   "fieldname": "remarks_section",
+   "fieldtype": "Section Break",
+   "label": "Remarks"
+  },
+  {
+   "fieldname": "remarks",
+   "fieldtype": "Small Text",
+   "label": "Remarks"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Daily Labour Attendance",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "normal_working_hours",
+   "fieldtype": "Float",
+   "label": "Normal Working Hours",
+   "non_negative": 1,
+   "precision": "2",
+   "reqd": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "material_request_created",
+   "fieldtype": "Check",
+   "hidden": 1,
+   "label": "Material Request Created",
+   "read_only": 1
+  },
+  {
+   "fieldname": "material_request",
+   "fieldtype": "Link",
+   "label": "Material Request",
+   "options": "Material Request",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_break_jycq",
+   "fieldtype": "Section Break"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-01-20 11:48:21.554089",
+ "modified": "2026-01-24 13:20:40.620257",
  "modified_by": "Administrator",
  "module": "Alnabeel",
  "name": "Daily Labour Attendance",

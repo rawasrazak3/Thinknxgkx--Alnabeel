@@ -1,42 +1,31 @@
 {
  "actions": [],
  "allow_rename": 1,
- "creation": "2026-01-19 12:15:35.190932",
+ "creation": "2026-01-21 10:22:01.856395",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "project",
-  "standard_working_hours"
+  "work_type"
  ],
  "fields": [
   {
-   "columns": 7,
-   "fieldname": "project",
+   "fieldname": "work_type",
    "fieldtype": "Link",
    "in_list_view": 1,
-   "label": "Project",
-   "options": "Project",
+   "label": "Work Type",
+   "options": "Work Type",
    "reqd": 1
-  },
-  {
-   "columns": 3,
-   "default": "10",
-   "fieldname": "standard_working_hours",
-   "fieldtype": "Float",
-   "in_list_view": 1,
-   "label": "Standard Working Hours",
-   "non_negative": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2026-01-21 11:26:36.359358",
+ "modified": "2026-01-21 10:22:44.459175",
  "modified_by": "Administrator",
  "module": "Alnabeel",
- "name": "Contractor Project Mapping",
+ "name": "Work Type Child",
  "owner": "Administrator",
  "permissions": [],
  "row_format": "Dynamic",
