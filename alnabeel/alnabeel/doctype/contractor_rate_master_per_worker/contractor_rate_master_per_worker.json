@@ -8,12 +8,11 @@
  "field_order": [
   "contractor",
   "project",
-  "worker_specific_details_section",
-  "contractor_rate_master_details",
-  "validity_and_status_section",
+  "validity_section",
   "effective_from",
   "effective_to",
-  "is_active",
+  "worker_specific_details_section",
+  "contractor_rate_master_details",
   "remarks_section",
   "remarks",
   "naming_series",
@@ -37,11 +36,6 @@
    "options": "Contractor Project Mapping"
   },
   {
-   "fieldname": "validity_and_status_section",
-   "fieldtype": "Section Break",
-   "label": "Validity and Status"
-  },
-  {
    "fieldname": "effective_from",
    "fieldtype": "Date",
    "label": "Effective From",
@@ -52,12 +46,6 @@
    "fieldtype": "Date",
    "label": "Effective To",
    "reqd": 1
-  },
-  {
-   "default": "0",
-   "fieldname": "is_active",
-   "fieldtype": "Check",
-   "label": "Is Active"
   },
   {
    "fieldname": "naming_series",
@@ -96,13 +84,17 @@
    "print_hide": 1,
    "read_only": 1,
    "search_index": 1
+  },
+  {
+   "fieldname": "validity_section",
+   "fieldtype": "Section Break",
+   "label": "Validity"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
- "is_submittable": 1,
  "links": [],
- "modified": "2026-01-20 11:34:10.529293",
+ "modified": "2026-01-22 11:44:32.160765",
  "modified_by": "Administrator",
  "module": "Alnabeel",
  "name": "Contractor Rate Master Per Worker",

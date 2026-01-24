@@ -1,53 +1,30 @@
 {
  "actions": [],
+ "allow_rename": 1,
  "autoname": "naming_series:",
- "creation": "2026-01-19 12:04:38.692726",
+ "creation": "2026-01-21 10:43:55.138864",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "labourer_name",
-  "work_type",
+  "worker_name",
   "contractor",
   "project",
-  "status",
-  "section_break_durv",
+  "section_break_lyew",
   "naming_series"
  ],
  "fields": [
   {
-   "fieldname": "labourer_name",
+   "fieldname": "worker_name",
    "fieldtype": "Data",
    "in_list_view": 1,
    "in_standard_filter": 1,
-   "label": "Labourer Name",
+   "label": "Worker Name",
    "reqd": 1
-  },
-  {
-   "fieldname": "status",
-   "fieldtype": "Select",
-   "in_standard_filter": 1,
-   "label": "Status",
-   "options": "\nActive\nInactive",
-   "reqd": 1
-  },
-  {
-   "fieldname": "work_type",
-   "fieldtype": "Table MultiSelect",
-   "in_standard_filter": 1,
-   "label": "Work Type",
-   "options": "Work Type Child",
-   "reqd": 1
-  },
-  {
-   "fieldname": "naming_series",
-   "fieldtype": "Select",
-   "hidden": 1,
-   "label": "Naming Series",
-   "options": "LAB-.#####"
   },
   {
    "fieldname": "contractor",
    "fieldtype": "Link",
+   "in_standard_filter": 1,
    "label": "Contractor",
    "options": "Supplier"
   },
@@ -58,17 +35,24 @@
    "options": "Contractor Project Mapping"
   },
   {
-   "fieldname": "section_break_durv",
+   "fieldname": "section_break_lyew",
    "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "hidden": 1,
+   "label": "Naming Series",
+   "options": "CW-.#####"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-01-22 14:55:24.111845",
+ "modified": "2026-01-21 12:50:17.732512",
  "modified_by": "Administrator",
  "module": "Alnabeel",
- "name": "Labourer Master",
+ "name": "Contract Workers",
  "naming_rule": "By \"Naming Series\" field",
  "owner": "Administrator",
  "permissions": [
@@ -87,9 +71,8 @@
  ],
  "row_format": "Dynamic",
  "rows_threshold_for_grid_search": 20,
- "search_fields": "labourer_name",
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": [],
- "title_field": "labourer_name"
+ "title_field": "worker_name"
 }
