@@ -11,26 +11,27 @@
   "worker_name",
   "from_time",
   "to_time",
+  "total_working_hours",
   "normal_hours",
   "rate_per_hour",
   "standard_hours_amt",
   "ot_hours",
   "ot_rate_per_hour",
   "ot_hours_amt",
-  "bonus_rate"
+  "bonus_rate",
+  "total_amt"
  ],
  "fields": [
   {
-   "columns": 1,
    "fetch_from": "testing.labourer_name",
    "fieldname": "labourer_name",
    "fieldtype": "Link",
-   "in_list_view": 1,
+   "hidden": 1,
    "label": "Labourer Name",
    "options": "Labourer Master"
   },
   {
-   "columns": 1,
+   "columns": 2,
    "fieldname": "work_type",
    "fieldtype": "Link",
    "in_list_view": 1,
@@ -39,14 +40,11 @@
    "reqd": 1
   },
   {
-   "columns": 1,
    "fieldname": "normal_hours",
    "fieldtype": "Float",
-   "in_list_view": 1,
    "label": "Normal Hours",
    "non_negative": 1,
-   "precision": "2",
-   "reqd": 1
+   "precision": "2"
   },
   {
    "columns": 1,
@@ -55,7 +53,8 @@
    "in_list_view": 1,
    "label": "OT Hours",
    "non_negative": 1,
-   "precision": "2"
+   "precision": "2",
+   "read_only": 1
   },
   {
    "columns": 1,
@@ -72,17 +71,13 @@
    "label": "To Time"
   },
   {
-   "columns": 1,
    "fieldname": "rate_per_hour",
    "fieldtype": "Currency",
-   "in_list_view": 1,
    "label": "Rate Per Hour",
    "non_negative": 1,
-   "precision": "3",
-   "reqd": 1
+   "precision": "3"
   },
   {
-   "columns": 1,
    "fieldname": "standard_hours_amt",
    "fieldtype": "Currency",
    "label": "Standard Hours Amt",
@@ -90,16 +85,13 @@
    "precision": "3"
   },
   {
-   "columns": 1,
    "fieldname": "ot_rate_per_hour",
    "fieldtype": "Currency",
-   "in_list_view": 1,
    "label": "OT Rate Per Hour",
    "non_negative": 1,
    "precision": "3"
   },
   {
-   "columns": 1,
    "fieldname": "ot_hours_amt",
    "fieldtype": "Currency",
    "label": "OT Hours Amt",
@@ -107,7 +99,7 @@
    "precision": "3"
   },
   {
-   "columns": 1,
+   "columns": 2,
    "fieldname": "worker_name",
    "fieldtype": "Link",
    "in_list_view": 1,
@@ -121,13 +113,33 @@
    "in_list_view": 1,
    "label": "Incentive / Bonus Rate",
    "precision": "3"
+  },
+  {
+   "columns": 1,
+   "fieldname": "total_working_hours",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Total Working Hours",
+   "non_negative": 1,
+   "precision": "2",
+   "read_only": 1
+  },
+  {
+   "columns": 1,
+   "fieldname": "total_amt",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Total Amt",
+   "non_negative": 1,
+   "precision": "3",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2026-01-22 11:40:11.551040",
+ "modified": "2026-01-27 14:01:23.158361",
  "modified_by": "Administrator",
  "module": "Alnabeel",
  "name": "Labour Attendance Detail",

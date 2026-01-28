@@ -1,16 +1,15 @@
 {
  "actions": [],
  "allow_rename": 1,
- "autoname": "naming_series:",
+ "autoname": "field:worker_name",
  "creation": "2026-01-21 10:43:55.138864",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
+  "naming_series",
   "worker_name",
   "contractor",
-  "project",
-  "section_break_lyew",
-  "naming_series"
+  "project"
  ],
  "fields": [
   {
@@ -19,7 +18,8 @@
    "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Worker Name",
-   "reqd": 1
+   "reqd": 1,
+   "unique": 1
   },
   {
    "fieldname": "contractor",
@@ -35,25 +35,22 @@
    "options": "Contractor Project Mapping"
   },
   {
-   "fieldname": "section_break_lyew",
-   "fieldtype": "Section Break"
-  },
-  {
    "fieldname": "naming_series",
    "fieldtype": "Select",
    "hidden": 1,
    "label": "Naming Series",
-   "options": "CW-.#####"
+   "options": "CW-.#####",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-01-21 12:50:17.732512",
+ "modified": "2026-01-28 05:54:33.417974",
  "modified_by": "Administrator",
  "module": "Alnabeel",
  "name": "Contract Workers",
- "naming_rule": "By \"Naming Series\" field",
+ "naming_rule": "By fieldname",
  "owner": "Administrator",
  "permissions": [
   {
