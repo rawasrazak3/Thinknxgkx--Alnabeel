@@ -23,8 +23,7 @@
    "fieldtype": "Link",
    "in_list_view": 1,
    "label": "Item Code",
-   "options": "Item",
-   "reqd": 1
+   "options": "Item"
   },
   {
    "fetch_from": "item_code.item_name",
@@ -45,15 +44,13 @@
    "fieldname": "account",
    "fieldtype": "Link",
    "label": "Account",
-   "options": "Account",
-   "read_only": 1
+   "options": "Account"
   },
   {
    "fieldname": "budget_qty",
    "fieldtype": "Float",
    "label": "Budget Qty",
-   "precision": "2",
-   "reqd": 1
+   "precision": "2"
   },
   {
    "fieldname": "budget_rate",
@@ -95,7 +92,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2026-01-09 18:04:31.311508",
+ "modified": "2026-01-28 07:37:27.027387",
  "modified_by": "Administrator",
  "module": "Alnabeel",
  "name": "Item Budget Detail",

@@ -262,3 +262,92 @@ def create_material_request_from_dla(dla_name):
     frappe.db.commit()  # Ensure MR exists in DB so route can open it
 
     return mr.name
+
+# project standard labour attendance from clr to dla
+# @frappe.whitelist()
+# def get_project_standard_hours(contractor, project):
+
+#     result = frappe.db.sql("""
+#         SELECT cpm.standard_working_hours
+#         FROM `tabContractor Labour Rate` clr
+#         JOIN `tabContractor Project Mapping` cpm
+#             ON cpm.parent = clr.name
+#         WHERE
+#             clr.contractor = %s
+#             AND cpm.project = %s
+#         LIMIT 1
+#     """, (contractor, project), as_dict=True)
+
+#     if result and result[0].standard_working_hours is not None:
+#         return flt(result[0].standard_working_hours)
+
+#     return None
+
+
+# create bulk material request from multiple dlas
+@frappe.whitelist()
+def create_bulk_material_request(dla_names):
+    if isinstance(dla_names, str):
+        import json
+        dla_names = json.loads(dla_names)
+
+    if not dla_names:
+        frappe.throw("No Daily Labour Attendance selected")
+
+    total_standard = 0
+    total_ot = 0
+    total_bonus = 0
+
+    for name in dla_names:
+        dla = frappe.get_doc("Daily Labour Attendance", name)
+
+        if dla.material_request_created:
+            frappe.throw(f"DLA {name} already linked to a Material Request")
+
+        total_standard += flt(dla.total_standard_amount)
+        total_ot += flt(dla.total_ot_amount)
+        total_bonus += flt(dla.total_bonus_amount)
+
+    # Create MR
+    mr = frappe.new_doc("Material Request")
+    mr.material_request_type = "Purchase"
+    mr.schedule_date = today()
+
+    items = [
+        ("Standard Labour", total_standard),
+        ("OT Labour", total_ot),
+        ("Incentive / Bonus Labour", total_bonus)
+    ]
+
+    for item_name, amount in items:
+        if amount > 0:
+            item_code = frappe.db.get_value("Item", {"item_name": item_name})
+            if not item_code:
+                frappe.throw(f"Item '{item_name}' not found")
+
+            mr.append("items", {
+                "item_code": item_code,
+                "qty": 1,
+                "rate": amount,
+                "amount": amount
+            })
+
+    if not mr.items:
+        frappe.throw("No amounts found to create Material Request")
+
+    mr.insert()
+
+    # Lock DLAs + link MR
+    for name in dla_names:
+        frappe.db.set_value(
+            "Daily Labour Attendance",
+            name,
+            {
+                "material_request_created": 1,
+                "material_request": mr.name
+            }
+        )
+
+    frappe.db.commit()
+    return mr.name
+

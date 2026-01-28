@@ -7,7 +7,6 @@
  "engine": "InnoDB",
  "field_order": [
   "material_request_created",
-  "material_request",
   "section_break_jycq",
   "date",
   "contractor",
@@ -23,6 +22,7 @@
   "total_standard_amount",
   "total_ot_amount",
   "total_bonus_amount",
+  "grand_total_amount",
   "remarks_section",
   "remarks",
   "section_break_kseq",
@@ -104,16 +104,16 @@
    "precision": "3"
   },
   {
+   "default": "00:00:00",
    "fieldname": "from_time",
    "fieldtype": "Time",
-   "label": "From Time",
-   "reqd": 1
+   "label": "From Time"
   },
   {
+   "default": "00:00:00",
    "fieldname": "to_time",
    "fieldtype": "Time",
-   "label": "To Time",
-   "reqd": 1
+   "label": "To Time"
   },
   {
    "fieldname": "select_all",
@@ -162,21 +162,20 @@
    "read_only": 1
   },
   {
-   "fieldname": "material_request",
-   "fieldtype": "Link",
-   "label": "Material Request",
-   "options": "Material Request",
-   "read_only": 1
-  },
-  {
    "fieldname": "section_break_jycq",
    "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "grand_total_amount",
+   "fieldtype": "Currency",
+   "label": "Grand Total Amount",
+   "non_negative": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-01-24 13:20:40.620257",
+ "modified": "2026-01-27 16:32:04.807289",
  "modified_by": "Administrator",
  "module": "Alnabeel",
  "name": "Daily Labour Attendance",
