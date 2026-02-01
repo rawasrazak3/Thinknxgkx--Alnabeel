@@ -8,6 +8,7 @@
  "field_order": [
   "contractor",
   "project",
+  "standard_working_hours",
   "validity_section",
   "effective_from",
   "effective_to",
@@ -31,9 +32,9 @@
   },
   {
    "fieldname": "project",
-   "fieldtype": "Table",
+   "fieldtype": "Link",
    "label": "Project",
-   "options": "Contractor Project Mapping"
+   "options": "Project"
   },
   {
    "fieldname": "effective_from",
@@ -89,12 +90,19 @@
    "fieldname": "validity_section",
    "fieldtype": "Section Break",
    "label": "Validity"
+  },
+  {
+   "fieldname": "standard_working_hours",
+   "fieldtype": "Float",
+   "label": "Standard Working Hours",
+   "non_negative": 1,
+   "precision": "2"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-01-22 11:44:32.160765",
+ "modified": "2026-01-28 22:29:42.108349",
  "modified_by": "Administrator",
  "module": "Alnabeel",
  "name": "Contractor Rate Master Per Worker",

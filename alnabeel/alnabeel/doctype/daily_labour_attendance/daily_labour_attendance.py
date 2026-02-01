@@ -32,15 +32,13 @@ def get_labourer_rate(contractor, project, date, work_type, labourer_name):
 
     # Get parent based on project mapping & date range
     parent = frappe.db.sql("""
-        SELECT crm.name
-        FROM `tabContractor Rate Master Per Worker` crm
-        JOIN `tabContractor Project Mapping` cpm
-            ON cpm.parent = crm.name
-        WHERE crm.contractor = %s
-          AND cpm.project = %s
-          AND crm.effective_from <= %s
-          AND (crm.effective_to IS NULL OR crm.effective_to >= %s)
-          AND (crm.docstatus = 1 OR crm.docstatus = 0)
+        SELECT name
+        FROM `tabContractor Rate Master Per Worker`
+        WHERE contractor = %s
+          AND project = %s
+          AND effective_from <= %s
+          AND (effective_to IS NULL OR effective_to >= %s)
+          AND (docstatus = 1 OR docstatus = 0)
         LIMIT 1
     """, (contractor, project, date, date), as_dict=True)
 
@@ -79,15 +77,13 @@ def get_worker_rate(contractor, project, date, work_type):
     date = getdate(date)
 
     parent = frappe.db.sql("""
-        SELECT clr.name
-        FROM `tabContractor Labour Rate` clr
-        JOIN `tabContractor Project Mapping` cpm
-            ON cpm.parent = clr.name
-        WHERE clr.contractor = %s
-          AND cpm.project = %s
-          AND clr.effective_from <= %s
-          AND (clr.effective_to IS NULL OR clr.effective_to >= %s)
-          AND clr.docstatus = 1
+        SELECT name
+        FROM `tabContractor Labour Rate`
+        WHERE contractor = %s
+          AND project = %s
+          AND effective_from <= %s
+          AND (effective_to IS NULL OR effective_to >= %s)
+          AND docstatus = 1
         LIMIT 1
     """, (contractor, project, date, date), as_dict=True)
 
@@ -134,10 +130,8 @@ def get_filtered_labourers(doctype, txt, searchfield, start, page_len, filters):
         FROM `tabContractor Rate Master Details` crmd
         JOIN `tabContractor Rate Master Per Worker` crm
             ON crmd.parent = crm.name
-        JOIN `tabContractor Project Mapping` cpm
-            ON cpm.parent = crm.name
         WHERE crm.contractor = %s
-          AND cpm.project = %s
+          AND crm.project = %s
           AND crmd.labourer_name LIKE %s
         ORDER BY crmd.labourer_name
         LIMIT %s OFFSET %s
@@ -171,10 +165,8 @@ def get_filtered_labourers_by_work_type(doctype, txt, searchfield, start, page_l
         FROM `tabContractor Rate Master Details` crmd
         JOIN `tabContractor Rate Master Per Worker` crm
             ON crmd.parent = crm.name
-        JOIN `tabContractor Project Mapping` cpm
-            ON cpm.parent = crm.name
         WHERE crm.contractor = %s
-          AND cpm.project = %s
+          AND crm.project = %s
           AND crmd.work_type = %s
           AND crm.effective_from <= %s
           AND (crm.effective_to IS NULL OR crm.effective_to >= %s)
@@ -193,26 +185,19 @@ def get_filtered_labourers_by_work_type(doctype, txt, searchfield, start, page_l
     ))
 
 # fetch standard working hrs
-# @frappe.whitelist()
-# def get_project_standard_hours(contractor, project):
-#     """
-#     Fetch standard working hours from Contractor Project Mapping child table
-#     """
-#     mapping = frappe.get_all(
-#         "Contractor Project Mapping",
-#         filters={
-#             "parent": contractor,
-#             "project": project
-#         },
-#         fields=["standard_working_hours"],
-#         order_by="idx asc",
-#         limit_page_length=1
-#     )
-
-#     if mapping:
-#         return mapping[0].standard_working_hours
-#     return 8  # fallback default
-
+@frappe.whitelist()
+def get_standard_working_hours(contractor, project):
+    return flt(
+        frappe.db.get_value(
+            "Contractor Labour Rate",
+            {
+                "contractor": contractor,
+                "project": project,
+                "docstatus": 1
+            },
+            "standard_working_hours"
+        ) or 0
+    )
 
 
 # create material request from dla
@@ -262,26 +247,6 @@ def create_material_request_from_dla(dla_name):
     frappe.db.commit()  # Ensure MR exists in DB so route can open it
 
     return mr.name
-
-# project standard labour attendance from clr to dla
-# @frappe.whitelist()
-# def get_project_standard_hours(contractor, project):
-
-#     result = frappe.db.sql("""
-#         SELECT cpm.standard_working_hours
-#         FROM `tabContractor Labour Rate` clr
-#         JOIN `tabContractor Project Mapping` cpm
-#             ON cpm.parent = clr.name
-#         WHERE
-#             clr.contractor = %s
-#             AND cpm.project = %s
-#         LIMIT 1
-#     """, (contractor, project), as_dict=True)
-
-#     if result and result[0].standard_working_hours is not None:
-#         return flt(result[0].standard_working_hours)
-
-#     return None
 
 
 # create bulk material request from multiple dlas

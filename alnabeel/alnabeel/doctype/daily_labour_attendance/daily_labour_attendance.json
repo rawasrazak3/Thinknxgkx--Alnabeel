@@ -11,7 +11,7 @@
   "date",
   "contractor",
   "project",
-  "normal_working_hours",
+  "standard_working_hours",
   "site",
   "labour_attendance_detail_section",
   "from_time",
@@ -47,12 +47,10 @@
    "reqd": 1
   },
   {
-   "fetch_from": "contractor.project",
    "fieldname": "project",
-   "fieldtype": "Table",
+   "fieldtype": "Link",
    "label": "Project",
-   "options": "Contractor Project Mapping",
-   "reqd": 1
+   "options": "Project"
   },
   {
    "fieldname": "site",
@@ -146,14 +144,6 @@
    "search_index": 1
   },
   {
-   "fieldname": "normal_working_hours",
-   "fieldtype": "Float",
-   "label": "Normal Working Hours",
-   "non_negative": 1,
-   "precision": "2",
-   "reqd": 1
-  },
-  {
    "default": "0",
    "fieldname": "material_request_created",
    "fieldtype": "Check",
@@ -170,12 +160,20 @@
    "fieldtype": "Currency",
    "label": "Grand Total Amount",
    "non_negative": 1
+  },
+  {
+   "fieldname": "standard_working_hours",
+   "fieldtype": "Float",
+   "label": "Standard Working Hours",
+   "non_negative": 1,
+   "precision": "2",
+   "reqd": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-01-27 16:32:04.807289",
+ "modified": "2026-01-28 22:50:06.758165",
  "modified_by": "Administrator",
  "module": "Alnabeel",
  "name": "Daily Labour Attendance",
