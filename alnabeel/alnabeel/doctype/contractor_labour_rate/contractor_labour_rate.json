@@ -8,6 +8,7 @@
  "field_order": [
   "contractor",
   "project",
+  "standard_working_hours",
   "contractor_labour_rate_details_section",
   "contractor_labour_rate_details",
   "validity_section",
@@ -16,14 +17,15 @@
   "remarks_section",
   "remarks",
   "section_break_aokc",
-  "naming_series"
+  "naming_series",
+  "amended_from"
  ],
  "fields": [
   {
    "fieldname": "project",
-   "fieldtype": "Table",
+   "fieldtype": "Link",
    "label": "Project",
-   "options": "Contractor Project Mapping"
+   "options": "Project"
   },
   {
    "fieldname": "validity_section",
@@ -82,13 +84,29 @@
    "fieldname": "remarks",
    "fieldtype": "Small Text",
    "label": "Remarks"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Contractor Labour Rate",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "standard_working_hours",
+   "fieldtype": "Float",
+   "label": "Standard Working Hours",
+   "precision": "2"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-01-22 15:23:52.131994",
+ "modified": "2026-01-28 22:26:41.133199",
  "modified_by": "Administrator",
  "module": "Alnabeel",
  "name": "Contractor Labour Rate",

@@ -29,25 +29,40 @@ frappe.ui.form.on("Daily Labour Attendance", {
             });
         }
 
-        // Lock DLA if MR is already created
         if (frm.doc.material_request_created) {
-            frm.set_read_only();
-            frm.disable_save();
-            frm.clear_custom_buttons();
-            frm.dashboard.set_headline(__('Material Request Created-Document Locked'));
-        }
+
+        // FULL FORM LOCK
+        frm.disable_form();
+        frm.disable_save();
+        frm.clear_custom_buttons();
+
+        // STOP ALL CHILD GRID EDITING
+        frm.fields_dict.labour_attendance_detail.grid.cannot_add_rows = true;
+        frm.fields_dict.labour_attendance_detail.grid.cannot_delete_rows = true;
+
+        // Disable parent time fields explicitly
+        frm.set_df_property("from_time", "read_only", 1);
+        frm.set_df_property("to_time", "read_only", 1);
+
+        frm.dashboard.set_headline(
+            __("Material Request Created – Document Locked")
+        );
+
+        return; //  STOP refresh logic
+    }
     },
 
     contractor(frm) {
         frm.clear_table("labour_attendance_detail");
         frm.refresh_field("labour_attendance_detail");
         set_labourer_filter(frm);
+        frm.trigger("fetch_standard_working_hours");
     },
 
     project(frm) {
         set_labourer_filter(frm);
-        load_standard_hours(frm);
         set_labourer_filter(frm);
+        frm.trigger("fetch_standard_working_hours");
     },
       
     date(frm) {
@@ -60,15 +75,27 @@ frappe.ui.form.on("Daily Labour Attendance", {
 
     unselect_all(frm) {
         unselect_all_times(frm);
+    },
+
+    fetch_standard_working_hours(frm) {
+
+        if (!frm.doc.contractor || !frm.doc.project) return;
+
+        frappe.call({
+            method: "alnabeel.alnabeel.doctype.daily_labour_attendance.daily_labour_attendance.get_standard_working_hours",
+            args: {
+                contractor: frm.doc.contractor,
+                project: frm.doc.project
+            },
+            callback(r) {
+                if (r.message !== undefined) {
+                    frm.set_value("standard_working_hours", r.message);
+                }
+            }
+        });
     }
 });
 
-// --------------------------------------
-// Get selected project from child table (if multiple projects)
-function get_selected_project(frm) {
-    if (!frm.doc.project || !frm.doc.project.length) return null;
-    return frm.doc.project[0].project;
-}
 
 // --------------------------------------
 // Set Labourer Link field filter (dynamic by Work Type)
@@ -87,7 +114,7 @@ function set_labourer_filter(frm) {
                 query: "alnabeel.alnabeel.doctype.daily_labour_attendance.daily_labour_attendance.get_filtered_labourers_by_work_type",
                 filters: {
                     contractor: frm.doc.contractor,
-                    project: get_selected_project(frm),
+                    project: frm.doc.project,
                     work_type: row.work_type,
                      date: frm.doc.date
                 },
@@ -173,7 +200,7 @@ function fetch_labourer_rate(frm, row) {
         method: "alnabeel.alnabeel.doctype.daily_labour_attendance.daily_labour_attendance.get_labourer_rate",
         args: {
             contractor: frm.doc.contractor,
-            project: get_selected_project(frm),
+            project: frm.doc.project,
             date: frm.doc.date,
             labourer_name: row.labourer_name,
             work_type: row.work_type
@@ -197,7 +224,7 @@ function fetch_worker_rate(frm, row) {
         method: "alnabeel.alnabeel.doctype.daily_labour_attendance.daily_labour_attendance.get_worker_rate",
         args: {
             contractor: frm.doc.contractor,
-            project: get_selected_project(frm),
+            project: frm.doc.project,
             date: frm.doc.date,
             work_type: row.work_type
         },
@@ -263,28 +290,11 @@ function unselect_all_times(frm) {
     frm.refresh_field('labour_attendance_detail');
 }
 
-// Fetch & cache standard hours
-// function load_standard_hours(frm) {
-//     let project = get_selected_project(frm);
-//     if (!project) return;
-
-//     frappe.call({
-//     method: "alnabeel.alnabeel.doctype.daily_labour_attendance.daily_labour_attendance.get_project_standard_hours",
-//     args: { 
-//         contractor: frm.doc.contractor,
-//         project: get_selected_project(frm) 
-//     },
-//     callback(r) {
-//         frm.standard_working_hours = flt(r.message) || 8;
-
-//         frm.doc.labour_attendance_detail.forEach(row => calculate_hours(frm, row));
-//         frm.refresh_field('labour_attendance_detail');
-//     }
-// });
-
-// }
-
+// --------------------------------------
+// Calculate Hours and Amounts
+// --------------------------------------
 function calculate_hours(frm, row) {
+
     if (!row.from_time || !row.to_time) return;
 
     let from = moment(row.from_time, "HH:mm");
@@ -294,12 +304,11 @@ function calculate_hours(frm, row) {
     let total_hours = moment.duration(to.diff(from)).asHours();
     if (total_hours < 0) total_hours = 0;
 
-   // normal hours = parent normal working hours
-    let normal_hours = frm.doc.normal_working_hours || 0;
+    let standard_working_hours = frm.doc.standard_working_hours || 0;
 
-    // OT hours = anything above normal working hours
-    let ot_hours = Math.max(total_hours - normal_hours, 0);
-
+    // normal and ot hours
+    let normal_hours = Math.min(total_hours, standard_working_hours);
+    let ot_hours = Math.max(total_hours - standard_working_hours, 0);
     frappe.model.set_value(row.doctype, row.name, "normal_hours", normal_hours);
     frappe.model.set_value(row.doctype, row.name, "ot_hours", ot_hours);
 
@@ -310,11 +319,19 @@ function calculate_hours(frm, row) {
 
     let standard_hours_amt = flt(normal_hours * rate_per_hour, 3);
     let ot_hours_amt = flt(ot_hours * ot_rate_per_hour, 3);
-    let bonus_amt = flt(normal_hours * bonus_rate, 3); // or you can decide formula
+    let bonus_amt = flt(normal_hours * bonus_rate, 3); 
 
     frappe.model.set_value(row.doctype, row.name, "standard_hours_amt", standard_hours_amt);
     frappe.model.set_value(row.doctype, row.name, "ot_hours_amt", ot_hours_amt);
     frappe.model.set_value(row.doctype, row.name, "bonus_amt", bonus_amt);
+
+    // Row-wise Total Amount = Standard + OT + Bonus
+    let total_amt = flt(standard_hours_amt + ot_hours_amt + bonus_amt, 3);
+    frappe.model.set_value(row.doctype, row.name, "total_amt", total_amt);
+
+    // Row-wise total working hours
+    let total_working_hours = flt(normal_hours + ot_hours, 3);
+    frappe.model.set_value(row.doctype, row.name, "total_working_hours", total_working_hours);
 
     // Update totals
     update_totals(frm);
@@ -325,15 +342,18 @@ function update_totals(frm) {
     let total_standard_amount = 0;
     let total_ot_amount = 0;
     let total_bonus_amount = 0;
+    let grand_total_amount = 0;
 
     frm.doc.labour_attendance_detail.forEach(row => {
         total_standard_amount += row.standard_hours_amt || 0;
         total_ot_amount += row.ot_hours_amt || 0;
         total_bonus_amount += row.bonus_amt || 0;
+        grand_total_amount += row.total_amt || 0;
     });
 
     frappe.model.set_value(frm.doc.doctype, frm.doc.name, "total_standard_amount", flt(total_standard_amount, 3));
     frappe.model.set_value(frm.doc.doctype, frm.doc.name, "total_ot_amount", flt(total_ot_amount, 3));
     frappe.model.set_value(frm.doc.doctype, frm.doc.name, "total_bonus_amount", flt(total_bonus_amount, 3));
+    frappe.model.set_value(frm.doc.doctype, frm.doc.name, "grand_total_amount", flt(grand_total_amount, 3));
 }
 

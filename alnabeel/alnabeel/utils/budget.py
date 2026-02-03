@@ -46,12 +46,15 @@ def update_item_budget(project, item_code, consumed_qty):
     new_consumed_qty = flt(ibd.consumed_qty) + flt(consumed_qty)
     consumed_amount = new_consumed_qty * flt(ibd.budget_rate)
 
+    balance_qty = flt(ibd.budget_qty) - new_consumed_qty
+
     frappe.db.set_value(
         "Item Budget Detail",
         ibd.name,
         {
             "consumed_qty": new_consumed_qty,
-            "consumed_amount": consumed_amount
+            "consumed_amount": consumed_amount,
+            "balance_qty": balance_qty
         }
     )
 

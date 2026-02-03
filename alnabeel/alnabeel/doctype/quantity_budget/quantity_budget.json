@@ -30,7 +30,11 @@
   "action_if_accumulated_monthly_budget_exceeded",
   "section_break_andl",
   "item_budget_detail",
-  "amended_from"
+  "amended_from",
+  "section_break_zmnr",
+  "revised_from",
+  "revision_no",
+  "revision_remarks"
  ],
  "fields": [
   {
@@ -204,12 +208,32 @@
    "print_hide": 1,
    "read_only": 1,
    "search_index": 1
+  },
+  {
+   "fieldname": "section_break_zmnr",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "revised_from",
+   "fieldtype": "Link",
+   "label": "Revised From",
+   "options": "Quantity Budget"
+  },
+  {
+   "fieldname": "revision_remarks",
+   "fieldtype": "Small Text",
+   "label": "Remarks"
+  },
+  {
+   "fieldname": "revision_no",
+   "fieldtype": "Int",
+   "label": "Revision No"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-01-08 23:10:27.936901",
+ "modified": "2026-02-03 00:51:31.109930",
  "modified_by": "Administrator",
  "module": "Alnabeel",
  "name": "Quantity Budget",

@@ -1,37 +1,4 @@
 
-// // frappe.ui.form.on("Project Material Request", {
-// //     refresh(frm) {
-// //         if (frm.is_new()) return;
-
-// //         // Remove all buttons first
-// //         frm.clear_custom_buttons();
-
-// //         // 🔹 If PMR table NOT visible → show Create Material Request
-// //         if (!frm.doc.show_pmr_table) {
-// //             frm.add_custom_button(
-// //                 __("Create Material Request"),
-// //                 () => {
-// //                     load_pmr_table(frm);
-// //                 },
-// //                 __("Actions")
-// //             );
-// //         }
-
-// //         // 🔹 If PMR table IS visible → show Move to MR
-// //         if (frm.doc.show_pmr_table) {
-// //             frm.add_custom_button(
-// //                 __("Move to MR"),
-// //                 () => {
-// //                     move_to_material_request(frm);
-// //                 },
-// //                 __("Actions")
-// //             );
-// //         }
-// //     }
-// // });
-
-
-
 frappe.ui.form.on("Project Material Request", {
     refresh(frm) {
         if (frm.is_new()) return;
@@ -164,6 +131,8 @@ function load_pmr_table(frm) {
                 row.budget_qty = d.budget_qty;
                 row.consumed_qty = d.consumed_qty;
                 row.balance_qty = d.balance_qty;
+                row.account = d.account;    
+                row.budget_rate = d.budget_rate;
             });
 
             frm.set_value("show_pmr_table", 1);
@@ -174,4 +143,3 @@ function load_pmr_table(frm) {
         }
     });
 }
-

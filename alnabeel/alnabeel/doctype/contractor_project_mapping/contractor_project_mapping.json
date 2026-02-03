@@ -21,9 +21,9 @@
   },
   {
    "columns": 3,
-   "default": "10",
    "fieldname": "standard_working_hours",
    "fieldtype": "Float",
+   "hidden": 1,
    "in_list_view": 1,
    "label": "Standard Working Hours",
    "non_negative": 1
@@ -33,7 +33,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2026-01-21 11:26:36.359358",
+ "modified": "2026-01-28 21:32:02.691483",
  "modified_by": "Administrator",
  "module": "Alnabeel",
  "name": "Contractor Project Mapping",

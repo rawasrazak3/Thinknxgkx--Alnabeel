@@ -6,40 +6,37 @@ app_email = "kpriyapv20@gmail.com"
 app_license = "mit"
 
 doc_events = {
-    # "Quantity Budget": {
-    #     "validate": "alnabeel.alnabeel.doctype.quantity_budget.quantity_budget.validate",
-    # },
-    
+   
     "Material Request": {
         "on_submit": [
             "alnabeel.alnabeel.utils.material_request_hooks.on_submit_material_request",
-            # "alnabeel.alnabeel.doctype.quantity_budget.quantity_budget.update_consumed_on_submit",
-            # "alnabeel.utils.budget.update_consumed_on_submit",
              "alnabeel.alnabeel.utils.budget.update_budget_on_mr_submit",
             "alnabeel.alnabeel.utils.daily_labour_attendance.lock_dla_after_mr",
-            "alnabeel.alnabeel.utils.dla_mr.lock_dla_after_mr_saved"
-            
+            "alnabeel.alnabeel.utils.dla_mr.lock_dla_after_mr_saved",
+            "alnabeel.alnabeel.doctype.quantity_budget.quantity_budget.on_submit_material_request",
+           
         ],
         "on_cancel": [
             "alnabeel.alnabeel.utils.material_request_hooks.on_cancel_material_request",
-            # "alnabeel.alnabeel.doctype.quantity_budget.quantity_budget.update_consumed_on_cancel",
-            #  "alnabeel.utils.budget.update_consumed_on_cancel",
-            "alnabeel.alnabeel.utils.budget.revert_budget_on_mr_cancel"
+            "alnabeel.alnabeel.utils.budget.revert_budget_on_mr_cancel",
+            "alnabeel.alnabeel.doctype.quantity_budget.quantity_budget.on_cancel_material_request",
         ],
-        # "on_update": [
-        #     "alnabeel.alnabeel.utils.dla_mr.lock_dla_after_mr_saved"
-        # ]
+        "validate": [ "alnabeel.alnabeel.doctype.quantity_budget.quantity_budget.validate_material_request_budget"],
+       
     },
-    
+
     "Purchase Order": {
         "on_submit": [
             "alnabeel.alnabeel.utils.purchase_order_hooks.on_submit_purchase_order",
-            # "alnabeel.alnabeel.doctype.quantity_budget.quantity_budget.update_consumed_on_submit",
+            "alnabeel.alnabeel.doctype.quantity_budget.quantity_budget.on_submit_purchase_order",
         ],
         "on_cancel": [
             "alnabeel.alnabeel.utils.purchase_order_hooks.on_cancel_purchase_order",
-            # "alnabeel.alnabeel.doctype.quantity_budget.quantity_budget.update_consumed_on_cancel",
+            "alnabeel.alnabeel.doctype.quantity_budget.quantity_budget.on_cancel_purchase_order",
+    
         ],
+        "validate": [ "alnabeel.alnabeel.doctype.quantity_budget.quantity_budget.validate_purchase_order_budget"],
+       
     },
 }
 

@@ -1,4 +1,47 @@
 
+# import frappe
+# from frappe.utils import flt
+# from erpnext.accounts.utils import get_fiscal_year
+
+# def get_consumed_qty(item_code, company, posting_date, budget_against, against_value):
+#     fy = get_fiscal_year(posting_date, company=company)[0]
+#     fy_doc = frappe.get_doc("Fiscal Year", fy)
+
+#     total_qty = 0
+#     total_amount = 0
+
+#     for table, parent, date_field, qty_field, amt_field, project_field in [
+#         ("Material Request Item", "Material Request", "transaction_date", "qty", "rate", "project"),
+#         ("Purchase Order Item", "Purchase Order", "transaction_date", "qty", "amount", "project"),
+#     ]:
+#         q = f"""
+#             SELECT SUM(i.{qty_field}) qty, SUM(i.{amt_field}) amount
+#             FROM `tab{table}` i
+#             JOIN `tab{parent}` p ON p.name=i.parent
+#             WHERE p.docstatus=1
+#               AND p.company=%s
+#               AND p.{date_field} BETWEEN %s AND %s
+#               AND i.item_code=%s
+#               AND i.{project_field}=%s
+#         """
+
+#         res = frappe.db.sql(q, (
+#             company,
+#             fy_doc.year_start_date,
+#             fy_doc.year_end_date,
+#             item_code,
+#             against_value
+#         ), as_dict=True)[0]
+
+#         total_qty += flt(res.qty)
+#         total_amount += flt(res.amount)
+
+#     return {
+#         "consumed_qty": total_qty,
+#         "consumed_amount": total_amount
+#     }
+
+
 import frappe
 from frappe.utils import flt, getdate, get_last_day
 from erpnext.accounts.utils import get_fiscal_year
@@ -107,7 +150,7 @@ def get_project_budget(project):
     items = frappe.get_all(
         "Item Budget Detail",
         filters={"parent": qb_name},
-        fields=["item_code", "item_name", "budget_qty", "budget_rate", "budget_amount"]
+        fields=["item_code", "item_name", "budget_qty", "budget_rate", "budget_amount", "account"]
     )
 
     return items

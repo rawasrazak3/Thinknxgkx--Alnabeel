@@ -92,12 +92,12 @@
    "fieldname": "mr_created",
    "fieldtype": "Check",
    "hidden": 1,
-   "label": "MR Created"
+   "label": "MR Created",
+   "read_only": 1
   },
   {
    "fieldname": "material_request",
    "fieldtype": "Link",
-   "hidden": 1,
    "label": "Material Request",
    "no_copy": 1,
    "options": "Material Request",
@@ -118,10 +118,11 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-01-19 16:55:42.047304",
+ "modified": "2026-02-02 15:06:45.870675",
  "modified_by": "Administrator",
  "module": "Alnabeel",
  "name": "Project Material Request",
+ "naming_rule": "By \"Naming Series\" field",
  "owner": "Administrator",
  "permissions": [
   {
