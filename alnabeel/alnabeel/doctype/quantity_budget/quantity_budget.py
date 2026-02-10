@@ -19,10 +19,10 @@ class QuantityBudget(Document):
                 frappe.throw(
                     _("You cannot revise a cancelled Quantity Budget")
                 )
-
+            self.recalculate_consumption()
         self.validate_against()
         self.validate_duplicate_budget()
-        self.recalculate_consumption()
+        
 
     def on_cancel(self):
         self.recalculate_consumption()
@@ -178,7 +178,6 @@ def get_total_consumption(company, fiscal_year, item_code, account, budget_again
     amount += flt(po[1])
 
     return {"qty": qty, "amount": amount}
-
 
 # =========================================================
 # FETCH BUDGET ITEM (QTY + RATE + ACCOUNT)
