@@ -61,25 +61,23 @@ frappe.ui.form.on("Quantity Budget", {
     },
 
     refresh(frm) {
-        if (frm.doc.docstatus === 1 && !frm.doc.revised_budget) {
-            frm.add_custom_button(
-                __("Create Revised Budget"),
-                () => {
-                    frappe.call({
-                        method: "alnabeel.alnabeel.doctype.quantity_budget.quantity_budget.create_revised_budget",
-                        args: {
-                            budget_name: frm.doc.name
-                        },
-                        callback(r) {
-                            if (r.message) {
-                                frappe.set_route("Form", "Quantity Budget", r.message);
-                            }
+    if (frm.doc.docstatus === 1) {
+        frm.add_custom_button(
+            __("Create Revised Budget"),
+            () => {
+                frappe.call({
+                    method: "alnabeel.alnabeel.doctype.quantity_budget.quantity_budget.create_revised_budget",
+                    args: { budget_name: frm.doc.name },
+                    callback(r) {
+                        if (r.message) {
+                            frappe.set_route("Form", "Quantity Budget", r.message);
                         }
-                    });
-                }
-            );
-        }
-    },
+                    }
+                });
+            }
+        );
+    }
+},
 
 });
 
@@ -157,7 +155,14 @@ function calculate_budget_amount(frm, cdt, cdn) {
 // Function to calculate balance quantity
 function calculate_balance_qty(frm, cdt, cdn) {
     let row = locals[cdt][cdn];
-    row.balance_qty = (row.budget_qty || 0) - (row.consumed_qty || 0);
+
+    let budget_qty = row.budget_qty || 0;
+    let revised_budget_qty = row.revised_budget_qty || 0;
+    let consumed_qty = row.consumed_qty || 0;
+
+    row.balance_qty = (budget_qty + revised_budget_qty) - consumed_qty;
+
     frm.refresh_field("item_budget_detail");
 }
+
 

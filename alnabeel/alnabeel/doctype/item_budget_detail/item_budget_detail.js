@@ -60,9 +60,10 @@ function calculate_balance_qty(frm, cdt, cdn) {
     let row = locals[cdt][cdn];
 
     let budget_qty = row.budget_qty || 0;
+    let revised_budget_qty = row.revised_budget_qty || 0;
     let consumed_qty = row.consumed_qty || 0;
 
-    row.balance_qty = budget_qty - consumed_qty;
+    row.balance_qty = (budget_qty + revised_budget_qty) - consumed_qty;
 
     frm.refresh_field("item_budget_detail");
 }
