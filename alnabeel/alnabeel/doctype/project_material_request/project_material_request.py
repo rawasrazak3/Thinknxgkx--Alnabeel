@@ -38,27 +38,51 @@ class ProjectMaterialRequest(Document):
 # ======================================================
 # Fetch PMR items from Quantity Budget
 # ======================================================
+# @frappe.whitelist()
+# def get_items_from_quantity_budget(project):
+#     return frappe.db.sql(
+#         """
+#         SELECT
+#             ibd.item_code,
+#             ibd.item_name,
+#             ibd.budget_qty,
+#             ibd.budget_rate,
+#             ibd.account,
+#             IFNULL(ibd.consumed_qty, 0) AS consumed_qty,
+#             (ibd.budget_qty - IFNULL(ibd.consumed_qty, 0)) AS balance_qty
+#         FROM `tabQuantity Budget` qb
+#         INNER JOIN `tabItem Budget Detail` ibd
+#             ON ibd.parent = qb.name
+#         WHERE qb.project = %s
+#           AND qb.docstatus = 1
+#         """,
+#         project,
+#         as_dict=True
+#     )
+
 @frappe.whitelist()
 def get_items_from_quantity_budget(project):
-    return frappe.db.sql(
-        """
+    """
+    fetch PMR items using budget + revised_budget
+    and latest revised_rate if exists.
+    """
+    return frappe.db.sql("""
         SELECT
             ibd.item_code,
             ibd.item_name,
-            ibd.budget_qty,
-            ibd.budget_rate,
+            (ibd.budget_qty + IFNULL(ibd.revised_budget_qty, 0)) AS budget_qty,
+            COALESCE(ibd.revised_budget_rate, ibd.budget_rate) AS budget_rate,
             ibd.account,
             IFNULL(ibd.consumed_qty, 0) AS consumed_qty,
-            (ibd.budget_qty - IFNULL(ibd.consumed_qty, 0)) AS balance_qty
+            ((ibd.budget_qty + IFNULL(ibd.revised_budget_qty, 0)) - IFNULL(ibd.consumed_qty, 0)) AS balance_qty
         FROM `tabQuantity Budget` qb
         INNER JOIN `tabItem Budget Detail` ibd
             ON ibd.parent = qb.name
         WHERE qb.project = %s
           AND qb.docstatus = 1
-        """,
-        project,
-        as_dict=True
-    )
+        ORDER BY qb.revision_no DESC, ibd.item_code
+    """, project, as_dict=True)
+
 
 
 # ======================================================

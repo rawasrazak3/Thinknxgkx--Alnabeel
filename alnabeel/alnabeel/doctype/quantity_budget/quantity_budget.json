@@ -33,8 +33,9 @@
   "amended_from",
   "section_break_zmnr",
   "revised_from",
+  "previous_revision",
   "revision_no",
-  "revision_remarks"
+  "revision_reason"
  ],
  "fields": [
   {
@@ -214,26 +215,36 @@
    "fieldtype": "Section Break"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "revised_from",
    "fieldtype": "Link",
    "label": "Revised From",
-   "options": "Quantity Budget"
-  },
-  {
-   "fieldname": "revision_remarks",
-   "fieldtype": "Small Text",
-   "label": "Remarks"
+   "options": "Quantity Budget",
+   "read_only": 1
   },
   {
    "fieldname": "revision_no",
    "fieldtype": "Int",
    "label": "Revision No"
+  },
+  {
+   "fieldname": "revision_reason",
+   "fieldtype": "Small Text",
+   "label": "Revision Reason"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "previous_revision",
+   "fieldtype": "Link",
+   "label": "Previous Revision",
+   "options": "Quantity Budget",
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-02-03 00:51:31.109930",
+ "modified": "2026-02-09 10:22:21.166318",
  "modified_by": "Administrator",
  "module": "Alnabeel",
  "name": "Quantity Budget",
