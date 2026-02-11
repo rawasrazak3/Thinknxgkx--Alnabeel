@@ -347,12 +347,16 @@ def validate_quantity_budget(company, posting_date, row):
     # Fetch latest budget item (revised if exists)
     budget = get_budget_item(company, fiscal_year, row.item_code, budget_against, against_value)
 
+    # if not budget:
+    #     frappe.throw(
+    #         _("No Quantity Budget found for Item {0} against {1} {2}").format(
+    #             row.item_code, budget_against, against_value
+    #         )
+    #     )
+
     if not budget:
-        frappe.throw(
-            _("No Quantity Budget found for Item {0} against {1} {2}").format(
-                row.item_code, budget_against, against_value
-            )
-        )
+        return
+
 
     # Assign values to PMR / MR row
     row.budget_qty = budget["budget_qty"]
