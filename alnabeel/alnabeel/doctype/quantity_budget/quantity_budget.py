@@ -113,11 +113,18 @@ class QuantityBudget(Document):
 # ========================================================
 def recalculate_from_doc(doc, method):
     """
-    Recalculate Quantity Budget consumption when MR / PO is submitted or cancelled
+    Recalculate Quantity Budget consumption when MR / PO / PI / JE is submitted or cancelled
     """
+    posting_date = (
+        getattr(doc, "posting_date", None)
+        or getattr(doc, "transaction_date", None)
+    )
 
+    if not posting_date:
+        return
+    
     fiscal_year = get_fiscal_year(
-        getdate(doc.transaction_date), company=doc.company
+        getdate(posting_date), company=doc.company
     )[0]
 
     budgets = frappe.get_all(
@@ -172,9 +179,36 @@ def get_total_consumption(company, fiscal_year, item_code, account, budget_again
               AND p.company = %s
               AND i.expense_account = %s
               AND {condition}
+              AND (i.material_request IS NULL OR i.material_request = '')
         """, values)[0]
 
         amount += flt(po[0])
+
+        pi = frappe.db.sql(f"""
+            SELECT SUM(i.amount)
+            FROM `tabPurchase Invoice Item` i
+            JOIN `tabPurchase Invoice` p ON p.name = i.parent
+            WHERE p.docstatus = 1
+            AND p.company = %s
+            AND i.expense_account = %s
+            AND {condition}
+            AND (i.purchase_order IS NULL OR i.purchase_order = '')
+        """, values)[0]
+
+        amount += flt(pi[0])
+
+        je = frappe.db.sql(f"""
+            SELECT SUM(i.debit)
+            FROM `tabJournal Entry Account` i
+            JOIN `tabJournal Entry` j ON j.name = i.parent
+            WHERE j.docstatus = 1
+            AND j.company = %s
+            AND i.account = %s
+            AND {condition}
+        """, values)[0]
+
+        amount += flt(je[0])
+
 
         return {"qty": 0, "amount": amount}
 
@@ -206,10 +240,28 @@ def get_total_consumption(company, fiscal_year, item_code, account, budget_again
           AND i.item_code = %s
           AND i.expense_account = %s
           AND {condition}
+          AND (i.material_request IS NULL OR i.material_request = '')
     """, values)[0]
 
     qty += flt(po[0])
     amount += flt(po[1])
+
+
+    pi = frappe.db.sql(f"""
+        SELECT SUM(i.qty), SUM(i.amount)
+        FROM `tabPurchase Invoice Item` i
+        JOIN `tabPurchase Invoice` p ON p.name = i.parent
+        WHERE p.docstatus = 1
+        AND p.company = %s
+        AND i.item_code = %s
+        AND i.expense_account = %s
+        AND {condition}
+        AND (i.purchase_order IS NULL OR i.purchase_order = '')
+    """, values)[0]
+
+    qty += flt(pi[0])
+    amount += flt(pi[1])
+
 
     return {"qty": qty, "amount": amount}
 
@@ -510,6 +562,66 @@ def validate_purchase_order_budget(doc, method):
     for row in doc.items:
         validate_quantity_budget(doc.company, doc.transaction_date, row)
 
+# =========================================================
+# PURCHASE INVOICE HOOK
+# =========================================================
+
+def validate_purchase_invoice_budget(doc, method):
+    for row in doc.items:
+        validate_quantity_budget(doc.company, doc.posting_date, row)
+
+
+# ----------------------------------------
+# Account validation in JE
+# -------------------------------------
+def validate_journal_entry_budget(doc, method):
+
+    for row in doc.accounts:
+
+        # Only debit rows
+        if flt(row.debit) <= 0:
+            continue
+
+        # Must have Project or Cost Center
+        if not row.project and not row.cost_center:
+            continue
+
+        budget_against = "Project" if row.project else "Cost Center"
+        against_value = row.project or row.cost_center
+
+        fiscal_year = get_fiscal_year(
+            getdate(doc.posting_date),
+            company=doc.company
+        )[0]
+
+        # Check if budget exists
+        qb_exists = frappe.db.exists(
+            "Quantity Budget",
+            {
+                "company": doc.company,
+                "fiscal_year": fiscal_year,
+                "docstatus": 1,
+                "budget_against": budget_against,
+                "project": against_value if budget_against == "Project" else None,
+                "cost_center": against_value if budget_against == "Cost Center" else None,
+            }
+        )
+
+        if not qb_exists:
+            continue  # No budget → allow JE
+
+        # Now validate
+        class TempRow:
+            pass
+
+        temp = TempRow()
+        temp.project = row.project
+        temp.cost_center = row.cost_center
+        temp.item_code = None
+        temp.expense_account = row.account
+        temp.amount = flt(row.debit)
+
+        validate_quantity_budget(doc.company, doc.posting_date, temp)
 
 # =========================================================
 # GET ITEM BUDGET FOR PROJECT
