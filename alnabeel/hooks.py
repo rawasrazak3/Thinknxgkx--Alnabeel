@@ -35,8 +35,28 @@ doc_events = {
         "validate": [ 
             "alnabeel.alnabeel.doctype.quantity_budget.quantity_budget.validate_purchase_order_budget",
              ],
-       
     },
+
+    "Purchase Invoice": {
+    "on_submit": [
+        "alnabeel.alnabeel.doctype.quantity_budget.quantity_budget.recalculate_from_doc",
+        ],
+
+    "on_cancel": [
+        "alnabeel.alnabeel.doctype.quantity_budget.quantity_budget.recalculate_from_doc",
+        ],
+
+    "validate": [
+        "alnabeel.alnabeel.doctype.quantity_budget.quantity_budget.validate_purchase_invoice_budget",
+        ],
+    },
+
+    "Journal Entry": {
+    "validate": "alnabeel.alnabeel.doctype.quantity_budget.quantity_budget.validate_journal_entry_budget",
+    "on_submit": "alnabeel.alnabeel.doctype.quantity_budget.quantity_budget.recalculate_from_doc",
+    "on_cancel": "alnabeel.alnabeel.doctype.quantity_budget.quantity_budget.recalculate_from_doc",
+    },
+
 }
 
 
