@@ -1,0 +1,131 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-02-24 15:06:21.337075",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "visit_datetime",
+  "new_customer",
+  "existing_customer",
+  "lead",
+  "location",
+  "lead_status",
+  "folllow_up_datetime",
+  "expected_budget",
+  "remarks",
+  "convert_to_lead",
+  "phone_no",
+  "email_id",
+  "year",
+  "month",
+  "sales_person"
+ ],
+ "fields": [
+  {
+   "columns": 1,
+   "fieldname": "visit_datetime",
+   "fieldtype": "Datetime",
+   "label": "Visit Datetime"
+  },
+  {
+   "columns": 1,
+   "fieldname": "new_customer",
+   "fieldtype": "Data",
+   "label": "New Customer"
+  },
+  {
+   "columns": 1,
+   "fieldname": "lead",
+   "fieldtype": "Link",
+   "label": "Lead / Deal",
+   "options": "Lead"
+  },
+  {
+   "columns": 1,
+   "fieldname": "location",
+   "fieldtype": "Data",
+   "label": "Location"
+  },
+  {
+   "columns": 1,
+   "fieldname": "lead_status",
+   "fieldtype": "Select",
+   "label": "Lead Status",
+   "options": "\nCold\nWarm"
+  },
+  {
+   "columns": 1,
+   "fieldname": "folllow_up_datetime",
+   "fieldtype": "Datetime",
+   "label": "Follow Up Datetime"
+  },
+  {
+   "columns": 1,
+   "fieldname": "expected_budget",
+   "fieldtype": "Currency",
+   "label": "Expected Budget",
+   "precision": "3"
+  },
+  {
+   "columns": 1,
+   "fieldname": "remarks",
+   "fieldtype": "Small Text",
+   "label": "Remarks"
+  },
+  {
+   "columns": 1,
+   "fieldname": "convert_to_lead",
+   "fieldtype": "Button",
+   "label": "Convert to Lead"
+  },
+  {
+   "columns": 1,
+   "fieldname": "existing_customer",
+   "fieldtype": "Link",
+   "label": "Existing Customer",
+   "options": "Customer"
+  },
+  {
+   "fieldname": "phone_no",
+   "fieldtype": "Phone",
+   "label": "Phone No."
+  },
+  {
+   "fieldname": "email_id",
+   "fieldtype": "Data",
+   "label": "Email ID"
+  },
+  {
+   "fieldname": "year",
+   "fieldtype": "Data",
+   "label": "Year"
+  },
+  {
+   "fieldname": "month",
+   "fieldtype": "Data",
+   "label": "Month"
+  },
+  {
+   "fieldname": "sales_person",
+   "fieldtype": "Data",
+   "label": "Sales Person"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2026-02-25 10:42:24.831381",
+ "modified_by": "Administrator",
+ "module": "Alnabeel",
+ "name": "Site Visit Detail",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
