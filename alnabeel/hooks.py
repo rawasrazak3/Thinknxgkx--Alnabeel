@@ -62,7 +62,8 @@ doc_events = {
 
 
 doctype_js = {
-    "Payment Entry": "public/js/payment_entry.js"
+    "Payment Entry": "public/js/payment_entry.js",
+    "Event": "public/js/event.js"
 }
 
 # Apps
@@ -315,9 +316,14 @@ fixtures = [
                 "name",
                 "in",
                 [
-                    "Project-custom_item_budget_detail"
-
-
+                    "Project-custom_item_budget_detail",
+                    "Event-custom_site_visit_plan",
+                    "Event-custom_sales_person",
+                    "Event-custom_year",
+                    "Event-custom_column_break_n8yd8",
+                    "Event-custom_month",
+                    "Event-custom_site_visit_details",
+                    "Event-custom_site_visit_detail"
                 ]
             ]                         
         ]
