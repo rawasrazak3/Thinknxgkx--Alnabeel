@@ -319,6 +319,7 @@ fixtures = [
                     "Project-custom_item_budget_detail",
                     "Event-custom_site_visit_plan",
                     "Event-custom_sales_person",
+                    "Event-custom_section_break_irmt1",
                     "Event-custom_year",
                     "Event-custom_column_break_n8yd8",
                     "Event-custom_month",
