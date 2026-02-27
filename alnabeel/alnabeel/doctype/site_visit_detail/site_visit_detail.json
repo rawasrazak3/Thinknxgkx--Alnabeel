@@ -1,7 +1,7 @@
 {
  "actions": [],
  "allow_rename": 1,
- "creation": "2026-02-24 15:06:21.337075",
+ "creation": "2026-02-26 23:25:50.077259",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
@@ -16,7 +16,11 @@
   "expected_budget",
   "remarks",
   "convert_to_lead",
-  "phone_no",
+  "lead_created",
+  "lead_id",
+  "mobile_no",
+  "phone",
+  "whatsapp",
   "email_id",
   "year",
   "month",
@@ -37,10 +41,16 @@
   },
   {
    "columns": 1,
-   "fieldname": "lead",
+   "fieldname": "existing_customer",
    "fieldtype": "Link",
-   "label": "Lead / Deal",
-   "options": "Lead"
+   "label": "Existing Customer",
+   "options": "Customer"
+  },
+  {
+   "columns": 1,
+   "fieldname": "lead",
+   "fieldtype": "Data",
+   "label": "Lead / Deal"
   },
   {
    "columns": 1,
@@ -53,7 +63,7 @@
    "fieldname": "lead_status",
    "fieldtype": "Select",
    "label": "Lead Status",
-   "options": "\nCold\nWarm"
+   "options": "Lead\nOpen\nReplied\nOpportunity\nQuotation\nLost Quotation\nInterested\nConverted\nDo Not Contact"
   },
   {
    "columns": 1,
@@ -81,16 +91,19 @@
    "label": "Convert to Lead"
   },
   {
-   "columns": 1,
-   "fieldname": "existing_customer",
-   "fieldtype": "Link",
-   "label": "Existing Customer",
-   "options": "Customer"
+   "fieldname": "mobile_no",
+   "fieldtype": "Phone",
+   "label": "Mobile No."
   },
   {
-   "fieldname": "phone_no",
-   "fieldtype": "Phone",
-   "label": "Phone No."
+   "fieldname": "phone",
+   "fieldtype": "Data",
+   "label": "Phone"
+  },
+  {
+   "fieldname": "whatsapp",
+   "fieldtype": "Data",
+   "label": "WhatsApp"
   },
   {
    "fieldname": "email_id",
@@ -100,24 +113,41 @@
   {
    "fieldname": "year",
    "fieldtype": "Data",
-   "label": "Year"
+   "label": "Year",
+   "read_only": 1
   },
   {
    "fieldname": "month",
    "fieldtype": "Data",
-   "label": "Month"
+   "label": "Month",
+   "read_only": 1
   },
   {
    "fieldname": "sales_person",
    "fieldtype": "Data",
-   "label": "Sales Person"
+   "label": "Sales Person",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "lead_created",
+   "fieldtype": "Check",
+   "label": "Lead Created",
+   "read_only": 1
+  },
+  {
+   "fieldname": "lead_id",
+   "fieldtype": "Link",
+   "label": "Lead ID",
+   "options": "Lead",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2026-02-25 10:42:24.831381",
+ "modified": "2026-02-26 23:53:28.756217",
  "modified_by": "Administrator",
  "module": "Alnabeel",
  "name": "Site Visit Detail",
