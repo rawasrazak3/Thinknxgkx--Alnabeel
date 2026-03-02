@@ -63,7 +63,8 @@ doc_events = {
 
 doctype_js = {
     "Payment Entry": "public/js/payment_entry.js",
-    "Event": "public/js/event.js"
+    "Event": "public/js/event.js",
+    "Opportunity": "public/js/opportunity.js"
 }
 
 # Apps
@@ -324,7 +325,12 @@ fixtures = [
                     "Event-custom_column_break_n8yd8",
                     "Event-custom_month",
                     "Event-custom_site_visit_details",
-                    "Event-custom_site_visit_detail"
+                    "Event-custom_site_visit_detail",
+                    "Lead-custom_lead_value",
+                    "Lead-custom_lead_amount",
+                    "Lead-custom_remarks",
+                    "Opportunity-custom_section_break_5fbiu",
+                    "Opportunity-custom_remark"
                 ]
             ]                         
         ]

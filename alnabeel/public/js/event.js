@@ -106,7 +106,8 @@ frappe.ui.form.on('Site Visit Detail', {
                     phone: row.phone,
                     mobile_no: row.mobile_no,
                     whatsapp_no: row.whatsapp,
-                    custom_expected_budget: row.expected_budget
+                    custom_lead_amount: row.expected_budget,
+                    custom_remarks: row.remarks
                 }
             },
             callback: function(r) {
