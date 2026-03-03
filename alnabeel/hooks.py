@@ -57,6 +57,10 @@ doc_events = {
     "on_cancel": "alnabeel.alnabeel.doctype.quantity_budget.quantity_budget.recalculate_from_doc",
     },
 
+    "Event": {
+        "on_update": "alnabeel.alnabeel.custom_scripts.event_participants.sync_site_visit_leads"
+    },
+
 }
 
 
@@ -64,7 +68,10 @@ doc_events = {
 doctype_js = {
     "Payment Entry": "public/js/payment_entry.js",
     "Event": "public/js/event.js",
-    "Opportunity": "public/js/opportunity.js"
+    "Opportunity": "public/js/opportunity.js",
+    "Purchase Order": "public/js/item_transaction.js",
+    "Sales Invoice": "public/js/item_transaction.js",
+    "Quotation": "public/js/item_transaction.js",
 }
 
 # Apps
@@ -330,7 +337,13 @@ fixtures = [
                     "Lead-custom_lead_amount",
                     "Lead-custom_remarks",
                     "Opportunity-custom_section_break_5fbiu",
-                    "Opportunity-custom_remark"
+                    "Opportunity-custom_remark",
+                    "Quotation-custom_section_break_i19dv",
+                    "Quotation-custom_item_transaction_details",
+                    "Sales Invoice-custom_section_break_o5uen",
+                    "Sales Invoice-custom_item_transaction_details",
+                    "Purchase Order-custom_section_break_1fgqa",
+                    "Purchase Order-custom_item_transaction_details"
                 ]
             ]                         
         ]
