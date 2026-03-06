@@ -12,7 +12,7 @@
   "lead",
   "location",
   "lead_status",
-  "folllow_up_datetime",
+  "follow_up_datetime",
   "expected_budget",
   "remarks",
   "convert_to_lead",
@@ -24,7 +24,8 @@
   "email_id",
   "year",
   "month",
-  "sales_person"
+  "sales_person",
+  "email_sent"
  ],
  "fields": [
   {
@@ -65,12 +66,6 @@
    "fieldtype": "Select",
    "label": "Lead Status",
    "options": "Lead\nOpen\nReplied\nOpportunity\nQuotation\nLost Quotation\nInterested\nConverted\nDo Not Contact"
-  },
-  {
-   "columns": 1,
-   "fieldname": "folllow_up_datetime",
-   "fieldtype": "Datetime",
-   "label": "Follow Up Datetime"
   },
   {
    "columns": 1,
@@ -142,13 +137,25 @@
    "label": "Lead ID",
    "options": "Lead",
    "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "email_sent",
+   "fieldtype": "Check",
+   "label": "Email Sent"
+  },
+  {
+   "columns": 1,
+   "fieldname": "follow_up_datetime",
+   "fieldtype": "Datetime",
+   "label": "Follow Up Datetime"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2026-03-02 11:03:26.416014",
+ "modified": "2026-03-06 15:05:17.287833",
  "modified_by": "Administrator",
  "module": "Alnabeel",
  "name": "Site Visit Detail",

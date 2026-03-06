@@ -4,6 +4,13 @@
 frappe.ui.form.on('Event', {
 
     refresh: function(frm) {
+        if (!frm.is_new()) {
+
+            frm.add_custom_button('Send Site Visit Email', function() {
+                send_site_visit_email(frm);
+            }, 'Actions');
+
+        }
         filter_child_rows(frm);
         color_convert_buttons(frm);
     },
@@ -21,7 +28,6 @@ frappe.ui.form.on('Event', {
     }
 
 });
-
 
 // ========================= CHILD TABLE ADD =========================
 
@@ -147,3 +153,41 @@ frappe.ui.form.on('Site Visit Detail', {
         });
     }
 });
+
+
+// ============ Function to send site visit details ===========
+function send_site_visit_email(frm) {
+
+    let rows = frm.doc.custom_site_visit_detail || [];
+
+    let unsent_rows = rows.filter(r => !r.email_sent);
+
+    if (unsent_rows.length === 0) {
+        frappe.msgprint("All site visits already emailed.");
+        return;
+    }
+
+    frappe.call({
+        method: "alnabeel.alnabeel.custom_scripts.site_visit_notifications.send_site_visit_email",
+        args: {
+            event_name: frm.doc.name,
+            rows: unsent_rows
+        },
+        freeze: true,
+        freeze_message: "Sending Email...",
+        callback: function(r) {
+
+            if (r.message) {
+
+                frappe.show_alert({
+                    message: "Site Visit Email Sent",
+                    indicator: "green"
+                });
+
+                frm.reload_doc();
+            }
+
+        }
+    });
+
+}
