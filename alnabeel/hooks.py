@@ -58,7 +58,9 @@ doc_events = {
     },
 
     "Event": {
-        "on_update": "alnabeel.alnabeel.custom_scripts.event_participants.sync_site_visit_leads"
+        "on_update": [
+            "alnabeel.alnabeel.custom_scripts.event_participants.sync_site_visit_leads",
+        ],
     },
 
 }
