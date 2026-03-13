@@ -1,6 +1,34 @@
 
 // ========================= EVENT PARENT =========================
 
+// frappe.ui.form.on('Event', {
+
+//     refresh: function(frm) {
+//         if (!frm.is_new()) {
+
+//             frm.add_custom_button('Send Site Visit Email', function() {
+//                 send_site_visit_email(frm);
+//             }, 'Actions');
+
+//         }
+//         filter_child_rows(frm);
+//         color_convert_buttons(frm);
+//     },
+
+//     custom_year: function(frm) {
+//         filter_child_rows(frm);
+//     },
+
+//     custom_month: function(frm) {
+//         filter_child_rows(frm);
+//     },
+
+//     custom_sales_person: function(frm) {
+//         filter_child_rows(frm);
+//     }
+
+// });
+
 frappe.ui.form.on('Event', {
 
     refresh: function(frm) {
@@ -11,8 +39,38 @@ frappe.ui.form.on('Event', {
             }, 'Actions');
 
         }
+
         filter_child_rows(frm);
         color_convert_buttons(frm);
+    },
+
+    after_save: function(frm) {
+
+        // Skip popup for script saves
+        if (frm.skip_email_popup) {
+            frm.skip_email_popup = false;
+            return;
+        }
+
+        let rows = frm.doc.custom_site_visit_detail || [];
+        let unsent_rows = rows.filter(r => !r.email_sent);
+
+        if (unsent_rows.length > 0) {
+
+            frappe.confirm(
+                "Do you want to send the Site Visit Email?",
+                function() {
+                    send_site_visit_email(frm);
+                },
+                function() {
+                    frappe.show_alert({
+                        message: "Email sending cancelled",
+                        indicator: "orange"
+                    });
+                }
+            );
+
+        }
     },
 
     custom_year: function(frm) {

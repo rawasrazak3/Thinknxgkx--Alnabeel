@@ -292,6 +292,63 @@ def send_site_visit_email(event_name, rows):
         reference_name=event.name
     )
 
+    # ---------------- Create ToDo ----------------
+
+    for user in directors:
+
+        if not frappe.db.exists(
+            "ToDo",
+            {
+                "allocated_to": user,
+                "reference_type": "Event",
+                "reference_name": event.name,
+                "status": "Open"
+            }
+        ):
+
+            frappe.get_doc({
+                "doctype": "ToDo",
+                "allocated_to": user,
+                "reference_type": "Event",
+                "reference_name": event.name,
+                "description": f"""
+                <b>Site Visit Report - {event.name}</b><br><br>
+                {table_html}
+                """,
+                "status": "Open"
+            }).insert(ignore_permissions=True)
+            
+    # Sales person ToDo
+    if event.custom_sales_person:
+
+        user_id = frappe.db.get_value(
+            "Employee",
+            event.custom_sales_person,
+            "user_id"
+        )
+
+        if user_id and not frappe.db.exists(
+            "ToDo",
+            {
+                "allocated_to": user_id,
+                "reference_type": "Event",
+                "reference_name": event.name,
+                "status": "Open"
+            }
+        ):
+
+            frappe.get_doc({
+                "doctype": "ToDo",
+                "allocated_to": user_id,
+                "reference_type": "Event",
+                "reference_name": event.name,
+                "description": f"""
+                <b>Site Visit Report - {event.name}</b><br><br>
+                {table_html}
+                """,
+                "status": "Open"
+            }).insert(ignore_permissions=True)
+
     # ---------------- Mark Rows Sent ----------------
 
     for row_name in sent_rows:
