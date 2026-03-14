@@ -142,7 +142,8 @@
    "default": "0",
    "fieldname": "email_sent",
    "fieldtype": "Check",
-   "label": "Email Sent"
+   "label": "Email Sent",
+   "read_only": 1
   },
   {
    "columns": 1,
@@ -155,7 +156,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2026-03-06 15:05:17.287833",
+ "modified": "2026-03-11 11:39:03.752967",
  "modified_by": "Administrator",
  "module": "Alnabeel",
  "name": "Site Visit Detail",
