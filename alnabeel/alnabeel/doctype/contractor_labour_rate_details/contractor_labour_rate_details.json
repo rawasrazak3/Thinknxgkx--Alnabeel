@@ -32,7 +32,7 @@
    "fieldtype": "Select",
    "in_list_view": 1,
    "label": "UOM",
-   "options": "\nDay\nHour\nShift",
+   "options": "\nHour",
    "reqd": 1
   },
   {
@@ -96,7 +96,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2026-01-21 11:23:12.314565",
+ "modified": "2026-04-03 09:48:46.008963",
  "modified_by": "Administrator",
  "module": "Alnabeel",
  "name": "Contractor Labour Rate Details",
