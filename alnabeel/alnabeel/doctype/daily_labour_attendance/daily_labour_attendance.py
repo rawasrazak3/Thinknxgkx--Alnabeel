@@ -217,6 +217,7 @@ def create_material_request_from_dla(dla_name):
     # Create MR doc
     mr = frappe.new_doc("Material Request")
     mr.material_request_type = "Purchase"
+    mr.custom_contractor = dla.contractor
     mr.custom_daily_labour_attendance = dla.name
     mr.schedule_date = today()
 
@@ -237,7 +238,8 @@ def create_material_request_from_dla(dla_name):
                 "item_code": item_code,
                 "qty": 1,
                 "rate": flt(item["amount"]),
-                "amount": flt(item["amount"])
+                "amount": flt(item["amount"]),
+                "project": dla.project
             })
 
     if not mr.items:
@@ -262,12 +264,26 @@ def create_bulk_material_request(dla_names):
     total_standard = 0
     total_ot = 0
     total_bonus = 0
+    project = None  
+    contractor = None
 
     for name in dla_names:
         dla = frappe.get_doc("Daily Labour Attendance", name)
 
         if dla.material_request_created:
             frappe.throw(f"DLA {name} already linked to a Material Request")
+
+         # Contractor validation
+        if not contractor:
+            contractor = dla.contractor
+        elif contractor != dla.contractor:
+            frappe.throw("All DLAs must have the same Contractor")
+
+        # Project validation
+        if not project:
+            project = dla.project
+        elif project != dla.project:
+            frappe.throw("All DLAs must have the same Project for bulk Material Request")
 
         total_standard += flt(dla.total_standard_amount)
         total_ot += flt(dla.total_ot_amount)
@@ -276,6 +292,7 @@ def create_bulk_material_request(dla_names):
     # Create MR
     mr = frappe.new_doc("Material Request")
     mr.material_request_type = "Purchase"
+    mr.custom_contractor = contractor  
     mr.schedule_date = today()
 
     items = [
@@ -294,7 +311,8 @@ def create_bulk_material_request(dla_names):
                 "item_code": item_code,
                 "qty": 1,
                 "rate": amount,
-                "amount": amount
+                "amount": amount,
+                "project": project
             })
 
     if not mr.items:

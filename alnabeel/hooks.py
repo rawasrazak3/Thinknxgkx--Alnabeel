@@ -345,7 +345,8 @@ fixtures = [
                     "Sales Invoice-custom_section_break_o5uen",
                     "Sales Invoice-custom_item_transaction_details",
                     "Purchase Order-custom_section_break_1fgqa",
-                    "Purchase Order-custom_item_transaction_details"
+                    "Purchase Order-custom_item_transaction_details",
+                    "Material Request-custom_contractor"
                 ]
             ]                         
         ]
