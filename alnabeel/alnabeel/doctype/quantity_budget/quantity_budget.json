@@ -31,6 +31,12 @@
   "section_break_andl",
   "item_budget_detail",
   "amended_from",
+  "section_break_tbxt",
+  "total_qty",
+  "total_consumed_qty",
+  "column_break_gthv",
+  "total_budget_amount",
+  "total_consumed_amount",
   "section_break_zmnr",
   "revised_from",
   "previous_revision",
@@ -239,12 +245,48 @@
    "label": "Previous Revision",
    "options": "Quantity Budget",
    "read_only": 1
+  },
+  {
+   "fieldname": "section_break_tbxt",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "total_qty",
+   "fieldtype": "Float",
+   "label": "Total Qty",
+   "precision": "2",
+   "read_only": 1
+  },
+  {
+   "fieldname": "total_consumed_qty",
+   "fieldtype": "Float",
+   "label": "Total Consumed Qty",
+   "precision": "2",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_gthv",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "total_budget_amount",
+   "fieldtype": "Currency",
+   "label": "Total Budget Amount",
+   "precision": "3",
+   "read_only": 1
+  },
+  {
+   "fieldname": "total_consumed_amount",
+   "fieldtype": "Currency",
+   "label": "Total Consumed Amount",
+   "precision": "3",
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-02-09 10:22:21.166318",
+ "modified": "2026-04-09 14:28:25.581388",
  "modified_by": "Administrator",
  "module": "Alnabeel",
  "name": "Quantity Budget",
