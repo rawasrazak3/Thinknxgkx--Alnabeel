@@ -675,25 +675,6 @@ def get_item_budget_for_project(project):
 # ========================================================
 # create revised budget
 # ========================================================
-# @frappe.whitelist()
-# def create_revised_budget(budget_name):
-#     old = frappe.get_doc("Quantity Budget", budget_name)
-
-#     if old.docstatus != 1:
-#         frappe.throw(_("Only submitted budgets can be revised"))
-
-#     new = frappe.copy_doc(old)
-
-#     new.revised_from = old.name        # immediate parent
-#     new.revision_no = (old.revision_no or 0) + 1
-#     new.docstatus = 0
-
-#     new.flags.ignore_permissions = True
-#     new.flags.ignore_links = True
-
-#     new.insert()
-#     return new.name
-
 @frappe.whitelist()
 def create_revised_budget(budget_name):
 
@@ -706,6 +687,7 @@ def create_revised_budget(budget_name):
 
     new.revised_from = old.name
     new.revision_no = (old.revision_no or 0) + 1
+    new.budget_workflow = "Pending"
     new.docstatus = 0
 
     # --------------------------------------------------

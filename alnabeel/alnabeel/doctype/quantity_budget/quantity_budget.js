@@ -37,6 +37,24 @@ frappe.ui.form.on("Quantity Budget", {
     // On refresh of parent form
     refresh: function(frm) {
         frm.trigger("toggle_reqd_fields");
+        calculate_totals(frm);
+
+        if (frm.doc.docstatus === 1) {
+        frm.add_custom_button(
+            __("Create Revised Budget"),
+            () => {
+                frappe.call({
+                    method: "alnabeel.alnabeel.doctype.quantity_budget.quantity_budget.create_revised_budget",
+                    args: { budget_name: frm.doc.name },
+                    callback(r) {
+                        if (r.message) {
+                            frappe.set_route("Form", "Quantity Budget", r.message);
+                        }
+                    }
+                });
+            }
+        );
+    }
     },
 
     // Triggered when user changes "budget_against" field
@@ -59,25 +77,6 @@ frappe.ui.form.on("Quantity Budget", {
         frm.toggle_reqd("cost_center", frm.doc.budget_against === "Cost Center");
         frm.toggle_reqd("project", frm.doc.budget_against === "Project");
     },
-
-    refresh(frm) {
-    if (frm.doc.docstatus === 1) {
-        frm.add_custom_button(
-            __("Create Revised Budget"),
-            () => {
-                frappe.call({
-                    method: "alnabeel.alnabeel.doctype.quantity_budget.quantity_budget.create_revised_budget",
-                    args: { budget_name: frm.doc.name },
-                    callback(r) {
-                        if (r.message) {
-                            frappe.set_route("Form", "Quantity Budget", r.message);
-                        }
-                    }
-                });
-            }
-        );
-    }
-},
 
 });
 
@@ -122,10 +121,12 @@ frappe.ui.form.on("Item Budget Detail", {
     budget_qty: function(frm, cdt, cdn) {
         calculate_budget_amount(frm, cdt, cdn);
         calculate_balance_qty(frm, cdt, cdn);
+        calculate_totals(frm);
     },
 
     budget_rate: function(frm, cdt, cdn) {
         calculate_budget_amount(frm, cdt, cdn);
+        calculate_totals(frm);
     },
 
     consumed_qty: function(frm, cdt, cdn) {
@@ -166,3 +167,47 @@ function calculate_balance_qty(frm, cdt, cdn) {
 }
 
 
+// TOTAL CALCULATION FUNCTION
+function calculate_totals(frm) {
+    let total_qty = 0;
+    let total_amount = 0;
+    let total_consumed_qty = 0;
+    let total_consumed_amount = 0;
+
+    (frm.doc.item_budget_detail || []).forEach(row => {
+
+        let budget_qty = flt(row.budget_qty);
+        let revised_qty = flt(row.revised_budget_qty);
+        let consumed_qty = flt(row.consumed_qty);
+
+        let budget_rate = flt(row.budget_rate);
+        let revised_rate = flt(row.revised_budget_rate);
+
+        let consumed_amount = flt(row.consumed_amount);
+
+        // TOTAL QTY (always)
+        let total_row_qty = budget_qty + revised_qty;
+
+        // BALANCE
+        let balance_qty = total_row_qty - consumed_qty;
+
+        // ACTIVE RATE 
+        let active_rate = revised_rate || budget_rate;
+
+        // FINAL AMOUNT 
+        let row_total_amount =
+            consumed_amount + (balance_qty * active_rate);
+
+        // SUM
+        total_qty += total_row_qty;
+        total_amount += row_total_amount;
+
+        total_consumed_qty += consumed_qty;
+        total_consumed_amount += consumed_amount;
+    });
+
+    frm.set_value("total_qty", total_qty);
+    frm.set_value("total_budget_amount", total_amount);
+    frm.set_value("total_consumed_qty", total_consumed_qty);
+    frm.set_value("total_consumed_amount", total_consumed_amount);
+}
