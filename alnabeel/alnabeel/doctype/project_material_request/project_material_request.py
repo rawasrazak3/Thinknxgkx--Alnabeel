@@ -125,7 +125,8 @@ def create_material_request(pmr_name):
 
     # Insert MR
     mr.insert(ignore_permissions=True)
-    mr.submit()
+    # mr.submit()
+    mr.save()
     
     # Lock PMR permanently
     pmr.db_set("mr_created", 1)
