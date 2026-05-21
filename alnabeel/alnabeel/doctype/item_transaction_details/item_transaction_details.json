@@ -48,19 +48,19 @@
   },
   {
    "columns": 1,
-   "fieldname": "rate",
+   "fieldname": "transaction_rate",
    "fieldtype": "Currency",
    "label": "Rate",
    "precision": "3"
   },
   {
-   "fieldname": "qty",
+   "fieldname": "transaction_qty",
    "fieldtype": "Float",
    "label": "Qty",
    "precision": "2"
   },
   {
-   "fieldname": "amount",
+   "fieldname": "transaction_amount",
    "fieldtype": "Currency",
    "label": "Amount",
    "precision": "3"
