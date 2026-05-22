@@ -22,9 +22,9 @@ function load_last_transactions(frm, item_code) {
                     child.posting_date = d.posting_date;
                     child.project = d.project;
                     child.cost_center = d.cost_center;
-                    child.qty = d.qty;
-                    child.rate = d.rate;
-                    child.amount = d.amount;
+                    child.transaction_qty = d.qty;
+                    child.transaction_rate = d.rate;
+                    child.transaction_amount = d.amount;
                     child.item_tax_template = d.item_tax_template;
                     child.valuation_rate = d.valuation_rate;
                     child.purchase_order = d.purchase_order;
